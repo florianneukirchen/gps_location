@@ -217,6 +217,11 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height:30),
             ElevatedButton(
               onPressed: () {
+                try {
+                  _getCurrentLocation();
+                } catch (e) {
+                  print(e);
+                }
                 appState.addWaypoint(currentposition!, "name");
               },
               child: const Text('Save Waypoint'),
