@@ -25,16 +25,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: MyPositionPage(),
+      );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyPositionPage extends StatefulWidget {
+  const MyPositionPage({super.key});
+
+  @override
+  State<MyPositionPage> createState() => _MyPositionPageState();
+}
+
+class _MyPositionPageState extends State<MyPositionPage> {
   Position? currentposition;
   StreamSubscription<Position>? positionStream;
 
@@ -105,12 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
+    return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -118,16 +128,14 @@ class _MyHomePageState extends State<MyHomePage> {
               'Current Location: ',
             ),
             currentposition != null ? Text(currentposition.toString()) : Text('No Location Data'),
+            ElevatedButton(
+              onPressed: _getCurrentLocation,
+              child: const Text('Get Location'),
+            ),
           ],
         ),
-      ),
+      );
 
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getCurrentLocation,
-        tooltip: 'Get Position',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
   }
 }
