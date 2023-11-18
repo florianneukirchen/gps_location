@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
 
 void main() {
@@ -35,6 +36,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Position? currentposition;
+  StreamSubscription<Position>? positionStream;
+
+  // Close the position stream before exiting the app.
+  @override
+  void dispose() {
+    positionStream?.cancel();
+    super.dispose();
+  }
 
   void _getCurrentLocation() async {
     bool serviceEnabled;
@@ -73,7 +82,24 @@ class _MyHomePageState extends State<MyHomePage> {
       currentposition = position;
     });
 
+    // Subscribe to position changes.
+    listenToLocationChanges();
+  } // _getCurrentLocation
 
+
+  void listenToLocationChanges() {
+    final LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position? position) {
+        print(position==null? 'Unknown' : 'Stream $position');
+        setState(() {
+          currentposition = position;
+        });
+      },
+    );
   }
 
   @override
