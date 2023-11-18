@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:proj4dart/proj4dart.dart';
 
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -27,19 +26,55 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  var selectedIndex = 0;
+  @override
   Widget build(BuildContext context) {
+
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        page = MyPositionPage();
+        break;
+      case 1:
+        page = Placeholder();
+      default:
+        throw UnimplementedError("No widget for selected index");
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: MyPositionPage(),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (int index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        destinations:[
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: "Current Position",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.edit_location_alt_outlined),
+            label: "Waypoints"
+          )
+        ],
+      ),
+      body: page,
       );
   }
 }
