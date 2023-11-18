@@ -37,13 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Position? currentposition;
 
   void _getCurrentLocation() async {
-    Position position = await _determinePosition();
-    setState(() {
-      currentposition = position;
-    });
-  }
-
-  Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -66,13 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
         return Future.error('Location Permissions are denied');
       }
     }
+
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    return await Geolocator.getCurrentPosition();
+    // Everything is fine, continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition();
+    print("Current Position: $position" );
+    setState(() {
+      currentposition = position;
+    });
+
+
   }
 
   @override
