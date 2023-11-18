@@ -167,7 +167,6 @@ class ShowLocationWGS84 extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text("WGS84"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -194,7 +193,7 @@ class ShowLocationWGS84 extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Altitude: " + position.altitude.toString() + " m"),
+                  Text("Altitude (WGS84): " + position.altitude.toString() + " m"),
                   Text("± " + position.altitudeAccuracy.toString() + " m"),
                 ],
               ),
@@ -262,13 +261,13 @@ class ShowLocationUTM extends StatelessWidget {
   Widget build(BuildContext context) {
     final utmzone = getUTMzone(position);
     final (pointutm, epsg) = reprojectUTM(position, utmzone);
+    // final (pointetrs89, epsg89) = reprojectUTM(position, utmzone, etrs89: true);
     return Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Text("UTM Zone $utmzone N ($epsg)"),
-              // Text(pointutm.toString()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -277,14 +276,20 @@ class ShowLocationUTM extends StatelessWidget {
                   Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
                 ],
               ),
+              /*
+              SizedBox(height: 8),
+              Text("UTM Zone $utmzone N (ETRS89, $epsg89)"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Altitude: " + position.altitude.toString() + " m"),
-                  Text("± " + position.altitudeAccuracy.toString() + " m"),
+                  Text("X: " + pointetrs89.x.toStringAsFixed(1) + " m"),
+                  Text("Y: " + pointetrs89.y.toStringAsFixed(1) + " m"),
+                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
                 ],
               ),
-              Text("Timestamp: " + position.timestamp.toString()),
+
+               */
+
             ],
           ),
         ));
