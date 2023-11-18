@@ -143,10 +143,24 @@ class _MyPositionPageState extends State<MyPositionPage> {
             const Text(
               'Current Location: ',
             ),
-            Text(currentposition.toString()),
+            ShowLocationWGS84(position: currentposition!),
           ],
         ),
       );
     }
+  }
+}
+
+class ShowLocationWGS84 extends StatelessWidget {
+  const ShowLocationWGS84({
+    super.key,
+    required this.position,
+  });
+
+  final Position position;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(position.toString());
   }
 }
