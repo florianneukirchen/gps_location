@@ -15,17 +15,49 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GPS Location',
-      theme: ThemeData(
-        // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'GPS Location'),
+    return ChangeNotifierProvider(
+        create: (context) => MyAppState(),
+        child: MaterialApp(
+          title: 'GPS Location',
+          theme: ThemeData(
+            // This is the theme of your application.
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+            useMaterial3: true,
+          ),
+          home: const MyHomePage(title: 'GPS Location'),
+        ),
     );
   }
 }
+
+class Waypoint {
+  final Position position;
+  String name = "Unnamed Waypoint";
+
+  Waypoint(this.position);
+
+  DateTime get timestamp => position.timestamp;
+  double get longitude => position.longitude;
+  double get latitude => position.latitude;
+  String get latlon => "Lat, Lon: " + position.latitude.toString() + ", " + position.longitude.toString();
+}
+
+
+class MyAppState extends ChangeNotifier {
+  var waypoints = <Waypoint>[];
+
+  void addWaypoint(Position position, String name) {
+    name = name.trim(); // Remove leading and trailing whitespaces
+    if (name == '') {
+      name = "Unnamed Waypoint";
+    }
+    var waypoint = Waypoint(position);
+    waypoint.name = name;
+    waypoints.add(waypoint);
+    notifyListeners();
+  }
+}
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -47,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = MyPositionPage();
         break;
       case 1:
-        page = Placeholder();
+        page = WaypointsPage();
       default:
         throw UnimplementedError("No widget for selected index");
     }
@@ -159,6 +191,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
     if (currentposition == null) {
       return Center(
         child: Column(
@@ -183,7 +216,9 @@ class _MyPositionPageState extends State<MyPositionPage> {
             ShowLocationUTM(position: currentposition!),
             SizedBox(height:30),
             ElevatedButton(
-              onPressed: null,
+              onPressed: () {
+                appState.addWaypoint(currentposition!, "name");
+              },
               child: const Text('Save Waypoint'),
             ),
           ],
@@ -338,3 +373,31 @@ class ShowLocationUTM extends StatelessWidget {
 }
 
 
+class WaypointsPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    if (appState.waypoints.isEmpty) {
+      return Center(
+        child: Text('No waypoints yet.'),
+      );
+    }
+
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('You have ${appState.waypoints.length} Waypoints'),
+        ),
+        for (var wp in appState.waypoints)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(wp.name),
+            subtitle: Text(wp.latlon + "\n" + wp.timestamp.toString()),
+            isThreeLine: true,
+          ),
+      ],
+    );
+  }
+}
