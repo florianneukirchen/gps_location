@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'GPS Location',
       theme: ThemeData(
         // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'GPS Location'),
@@ -138,7 +138,6 @@ class _MyPositionPageState extends State<MyPositionPage> {
     } else {
       return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
               'Current Location: ',
@@ -161,6 +160,44 @@ class ShowLocationWGS84 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(position.toString());
+    return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text("WGS84"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Lat: " + position.latitude.toString() + "°"),
+                  Text("Lon: " + position.longitude.toString() + "°"),
+                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Speed: "
+                      + position.speed.toString()
+                      + " m/s (± "
+                      + position.speedAccuracy.toString() + ")"
+                  ),
+                  Text("Heading: "
+                      + position.heading.toString()
+                      + "° (± "
+                      + position.headingAccuracy.toString() + "°)"
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Altitude: " + position.altitude.toString() + " m"),
+                  Text("± " + position.altitudeAccuracy.toString() + " m"),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }
