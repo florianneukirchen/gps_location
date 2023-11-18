@@ -119,15 +119,15 @@ class _MyPositionPageState extends State<MyPositionPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Center(
+    if (currentposition == null) {
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Current Location: ',
+              'Current Location is unknown.',
             ),
-            currentposition != null ? Text(currentposition.toString()) : Text('No Location Data'),
+            SizedBox(height: 10),
             ElevatedButton(
               onPressed: _getCurrentLocation,
               child: const Text('Get Location'),
@@ -135,7 +135,18 @@ class _MyPositionPageState extends State<MyPositionPage> {
           ],
         ),
       );
-
-
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Current Location: ',
+            ),
+            Text(currentposition.toString()),
+          ],
+        ),
+      );
+    }
   }
 }
