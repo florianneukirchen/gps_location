@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'dart:async';
+
+
 
 
 void main() {
@@ -196,6 +198,7 @@ class ShowLocationWGS84 extends StatelessWidget {
                   Text("± " + position.altitudeAccuracy.toString() + " m"),
                 ],
               ),
+              Text("Timestamp: " + position.timestamp.toString()),
             ],
           ),
         ));
