@@ -44,19 +44,89 @@ class Waypoint {
 
 
 class MyAppState extends ChangeNotifier {
+
+  Position? currentposition;
+  StreamSubscription<Position>? positionStream;
   var waypoints = <Waypoint>[];
 
-  void addWaypoint(Position position, String name) {
+  // Close the position stream before exiting the app.
+  @override
+  void dispose() {
+    positionStream?.cancel();
+    super.dispose();
+  }
+
+  void updateLocation() async {
+    currentposition = await getCurrentLocation();
+    notifyListeners();
+  }
+
+  void listenToLocationChanges() {
+    final LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position? position) {
+        print(position==null? 'Unknown' : 'Stream $position');
+        currentposition = position;
+        notifyListeners();
+      },
+    );
+  }
+
+  void addWaypoint(String name) {
     name = name.trim(); // Remove leading and trailing whitespaces
     if (name == '') {
       name = "Unnamed Waypoint";
     }
-    var waypoint = Waypoint(position);
+
+
+    var waypoint = Waypoint(currentposition!);
     waypoint.name = name;
     waypoints.add(waypoint);
     notifyListeners();
   }
 }
+
+// Get current location
+Future<Position> getCurrentLocation() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the
+    // App to enable the location services.
+    throw Exception('Location Services are disabled');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if(permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if(permission == LocationPermission.denied) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      throw Exception('Location Permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately.
+    throw Exception(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  // Everything is fine, continue accessing the position of the device.
+  Position position = await Geolocator.getCurrentPosition();
+  print("Current Position: $position" );
+  return position;
+} // _getCurrentLocation
+
+
 
 
 class MyHomePage extends StatefulWidget {
@@ -120,79 +190,13 @@ class MyPositionPage extends StatefulWidget {
 }
 
 class _MyPositionPageState extends State<MyPositionPage> {
-  Position? currentposition;
-  StreamSubscription<Position>? positionStream;
-
-  // Close the position stream before exiting the app.
-  @override
-  void dispose() {
-    positionStream?.cancel();
-    super.dispose();
-  }
-
-  void _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location Services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if(permission == LocationPermission.denied) {
-        // Location services are not enabled don't continue
-        // accessing the position and request users of the
-        // App to enable the location services.
-        return Future.error('Location Permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // Everything is fine, continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition();
-    print("Current Position: $position" );
-    setState(() {
-      currentposition = position;
-    });
-
-    // Subscribe to position changes.
-    listenToLocationChanges();
-  } // _getCurrentLocation
-
-
-  void listenToLocationChanges() {
-    final LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
-    );
-    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-          (Position? position) {
-        print(position==null? 'Unknown' : 'Stream $position');
-        setState(() {
-          currentposition = position;
-        });
-      },
-    );
-  }
 
 
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    if (currentposition == null) {
+    if (appState.currentposition == null) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +206,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: _getCurrentLocation,
+              onPressed: appState.updateLocation,
               child: const Text('Get Location'),
             ),
           ],
@@ -212,18 +216,13 @@ class _MyPositionPageState extends State<MyPositionPage> {
       return Center(
         child: Column(
           children: <Widget>[
-            ShowLocationWGS84(position: currentposition!),
-            ShowLocationUTM(position: currentposition!),
+            ShowLocationWGS84(position: appState.currentposition!),
+            ShowLocationUTM(position: appState.currentposition!),
             SizedBox(height:30),
             ElevatedButton(
               onPressed: () {
-                try {
-                  _getCurrentLocation();
-                } catch (e) {
-                  print(e);
-                }
-                appState.addWaypoint(currentposition!, "name");
-              },
+                appState.addWaypoint("name");
+                },
               child: const Text('Save Waypoint'),
             ),
           ],
