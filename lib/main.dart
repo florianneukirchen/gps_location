@@ -179,7 +179,12 @@ class _MyPositionPageState extends State<MyPositionPage> {
         child: Column(
           children: <Widget>[
             ShowLocationWGS84(position: currentposition!),
-            ShowLocationUTM(position: currentposition!)
+            ShowLocationUTM(position: currentposition!),
+            SizedBox(height:30),
+            ElevatedButton(
+              onPressed: null,
+              child: const Text('Save Waypoint'),
+            ),
           ],
         ),
       );
