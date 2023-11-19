@@ -179,6 +179,8 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError("No widget for selected index");
     }
 
+    var appState = context.watch<MyAppState>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -197,9 +199,12 @@ class _MyHomePageState extends State<MyHomePage> {
             label: "Current Position",
           ),
           NavigationDestination(
-            icon: Icon(Icons.edit_location_alt_outlined),
-            label: "Waypoints"
-          )
+              icon: Badge(
+                label: Text(appState.waypoints.length.toString()),
+                child: Icon(Icons.edit_location_alt_outlined),
+              ),
+              label: "Waypoints"
+          ),
         ],
       ),
       body: page,
@@ -460,7 +465,6 @@ class WaypointsPage extends StatelessWidget{
         child: Text('No waypoints yet.'),
       );
     }
-
 
     return ListView.builder(
       itemCount: appState.waypoints.length,
