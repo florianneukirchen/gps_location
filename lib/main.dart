@@ -57,10 +57,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   Future<String> updateLocation() async {
-    print("xxy");
     var position = await getCurrentLocation().catchError((e) {
-      print("tata");
-      print(e.message);
       throw Exception(e.message);
     });
     currentposition = position;
@@ -197,19 +194,23 @@ class MyPositionPage extends StatefulWidget {
 
 class _MyPositionPageState extends State<MyPositionPage> {
 
-  void _asyncBtn(callback) async {
+  void _asyncBtn(callback, scaffoldmessenger) async {
     try {
       await callback();
     } on Exception catch (e) {
       var msg = e.toString().substring(11);
-      print("hier");
-      print(msg);
+      scaffoldmessenger.showSnackBar(
+        SnackBar(
+          content: Text(msg),
+        )
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    var scaffoldmessenger = ScaffoldMessenger.of(context);
     if (appState.currentposition == null) {
       return Center(
         child: Column(
@@ -221,7 +222,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                _asyncBtn(appState.updateLocation);
+                _asyncBtn(appState.updateLocation, scaffoldmessenger);
               },
               child: const Text('Get Location'),
             ),
