@@ -497,7 +497,7 @@ class WaypointsPage extends StatelessWidget{
           leading: Icon(Icons.favorite),
           title: Text(appState.waypoints[index].name),
           subtitle: Text(appState.waypoints[index].latlon + "\n" +
-              appState.waypoints[index].timestamp.toString()),
+              asLocalTime(appState.waypoints[index].timestamp)),
           isThreeLine: true,
         );
       },
