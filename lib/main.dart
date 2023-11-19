@@ -56,13 +56,12 @@ class MyAppState extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<String> updateLocation() async {
+  void updateLocation() async {
     var position = await getCurrentLocation().catchError((e) {
       throw Exception(e.message);
     });
     currentposition = position;
     notifyListeners();
-    return "";
   }
 
   void listenToLocationChanges() {
