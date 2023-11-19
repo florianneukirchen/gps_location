@@ -221,6 +221,16 @@ class MyPositionPage extends StatefulWidget {
 
 class _MyPositionPageState extends State<MyPositionPage> {
 
+  // Will be used to get value from text field
+  final textController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up when widget is disposed
+    textController.dispose();
+    super.dispose();
+  }
+
   void _asyncBtnLoc(callback, scaffoldmessenger) async {
     try {
       await callback();
@@ -277,10 +287,23 @@ class _MyPositionPageState extends State<MyPositionPage> {
             ShowLocationWGS84(position: appState.currentposition!),
             ShowLocationUTM(position: appState.currentposition!),
             SizedBox(height:30),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: textController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Optional Waypoint Name",
+                ),
+              ),
+            ),
+            SizedBox(height:30),
             ElevatedButton(
               onPressed: () {
-                _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, "name");
-                // appState.addWaypoint("name");
+                _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, textController.text);
+                textController.clear();
+                // hide keybord
+                FocusManager.instance.primaryFocus?.unfocus();
                 },
               child: const Text('Save Waypoint'),
             ),
