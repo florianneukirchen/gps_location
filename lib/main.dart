@@ -56,9 +56,16 @@ class MyAppState extends ChangeNotifier {
     super.dispose();
   }
 
-  void updateLocation() async {
-    currentposition = await getCurrentLocation();
+  Future<String> updateLocation() async {
+    print("xxy");
+    var position = await getCurrentLocation().catchError((e) {
+      print("tata");
+      print(e.message);
+      throw Exception(e.message);
+    });
+    currentposition = position;
     notifyListeners();
+    return "";
   }
 
   void listenToLocationChanges() {
@@ -80,7 +87,6 @@ class MyAppState extends ChangeNotifier {
     if (name == '') {
       name = "Unnamed Waypoint";
     }
-
 
     var waypoint = Waypoint(currentposition!);
     waypoint.name = name;
@@ -191,7 +197,15 @@ class MyPositionPage extends StatefulWidget {
 
 class _MyPositionPageState extends State<MyPositionPage> {
 
-
+  void _asyncBtn(callback) async {
+    try {
+      await callback();
+    } on Exception catch (e) {
+      var msg = e.toString().substring(11);
+      print("hier");
+      print(msg);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +220,9 @@ class _MyPositionPageState extends State<MyPositionPage> {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: appState.updateLocation,
+              onPressed: () {
+                _asyncBtn(appState.updateLocation);
+              },
               child: const Text('Get Location'),
             ),
           ],
