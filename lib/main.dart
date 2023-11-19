@@ -286,6 +286,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             ShowStatus(statusOK: (appState.positionStream != null)),
             ShowLocationWGS84(position: appState.currentposition!),
             ShowLocationUTM(position: appState.currentposition!),
+            ShowTimestamp(position: appState.currentposition!),
             SizedBox(height:30),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -359,13 +360,43 @@ class ShowLocationWGS84 extends StatelessWidget {
                   Text("± " + position.altitudeAccuracy.toString() + " m"),
                 ],
               ),
-              Text("Timestamp: " + position.timestamp.toString()),
-              Text("Local time: " + asLocalTime(position.timestamp))
             ],
           ),
         ));
   }
 }
+
+class ShowTimestamp extends StatelessWidget {
+  const ShowTimestamp({
+    super.key,
+    required this.position,
+  });
+
+  final Position position;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text("Timestamp: " + position.timestamp.toString()),
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Local time: " + asLocalTime(position.timestamp)),
+                ],
+              )
+            ],
+          ),
+        ));
+  }
+}
+
 
 
 class ShowStatus extends StatelessWidget {
