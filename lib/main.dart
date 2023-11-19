@@ -78,7 +78,17 @@ class MyAppState extends ChangeNotifier {
     );
   }
 
-  void addWaypoint(String name) {
+  void addWaypoint(String name) async {
+    String? errormsg;
+
+    // Try to update position
+    try {
+      currentposition = await getCurrentLocation();
+    } on Exception catch (e) {
+      errormsg = e.toString().substring(11);
+    }
+
+    // Create Waypoint instance
     name = name.trim(); // Remove leading and trailing whitespaces
     if (name == '') {
       name = "Unnamed Waypoint";
@@ -86,10 +96,18 @@ class MyAppState extends ChangeNotifier {
 
     var waypoint = Waypoint(currentposition!);
     waypoint.name = name;
+
+    // Save Waypoint
     waypoints.add(waypoint);
     notifyListeners();
-  }
-}
+
+    // Throw exception if updating location failed
+    if (errormsg != null) {
+      errormsg = "Used last known position, but: " + errormsg;
+      throw Exception(errormsg);
+    }
+  } // addWaypoint
+} // MyAppState
 
 // Get current location
 Future<Position> getCurrentLocation() async {
@@ -193,7 +211,7 @@ class MyPositionPage extends StatefulWidget {
 
 class _MyPositionPageState extends State<MyPositionPage> {
 
-  void _asyncBtn(callback, scaffoldmessenger) async {
+  void _asyncBtnLoc(callback, scaffoldmessenger) async {
     try {
       await callback();
     } on Exception catch (e) {
@@ -202,6 +220,20 @@ class _MyPositionPageState extends State<MyPositionPage> {
         SnackBar(
           content: Text(msg),
         )
+      );
+    }
+  }
+
+  void _asyncBtnWP(callback, scaffoldmessenger, name) async {
+    try {
+      await callback(name);
+    } on Exception catch (e) {
+      var msg = "Saved the last known position but unable to update position: ";
+      msg = msg + e.toString().substring(11);
+      scaffoldmessenger.showSnackBar(
+          SnackBar(
+            content: Text(msg),
+          )
       );
     }
   }
@@ -221,7 +253,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                _asyncBtn(appState.updateLocation, scaffoldmessenger);
+                _asyncBtnLoc(appState.updateLocation, scaffoldmessenger);
               },
               child: const Text('Get Location'),
             ),
@@ -237,7 +269,8 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height:30),
             ElevatedButton(
               onPressed: () {
-                appState.addWaypoint("name");
+                _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, "name");
+                // appState.addWaypoint("name");
                 },
               child: const Text('Save Waypoint'),
             ),
