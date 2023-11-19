@@ -461,20 +461,18 @@ class WaypointsPage extends StatelessWidget{
       );
     }
 
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have ${appState.waypoints.length} Waypoints'),
-        ),
-        for (var wp in appState.waypoints)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(wp.name),
-            subtitle: Text(wp.latlon + "\n" + wp.timestamp.toString()),
-            isThreeLine: true,
-          ),
-      ],
+
+    return ListView.builder(
+      itemCount: appState.waypoints.length,
+      itemBuilder: (BuildContext, int index) {
+        return ListTile(
+          leading: Icon(Icons.favorite),
+          title: Text(appState.waypoints[index].name),
+          subtitle: Text(appState.waypoints[index].latlon + "\n" +
+              appState.waypoints[index].timestamp.toString()),
+          isThreeLine: true,
+        );
+      },
     );
   }
 }
