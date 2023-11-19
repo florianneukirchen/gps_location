@@ -75,7 +75,7 @@ class MyAppState extends ChangeNotifier {
     );
     positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
           (Position? position) {
-        print(position==null? 'Unknown' : 'Stream $position');
+        print(position==null? 'Unknown' : 'Position stream: $position');
         currentposition = position;
         notifyListeners();
       },
@@ -402,7 +402,8 @@ class ShowLocationUTM extends StatelessWidget {
     }
 
     // Set up proj (proj4dart only has few named projections)
-    var projDst = Projection.add(epsg, projstring);
+    // Get it by name if it exists, else create and add it
+    var projDst = Projection.get(epsg) ?? Projection.add(epsg, projstring);
     var projSrc = Projection.get('EPSG:4326')!;
     var pointDst = projSrc.transform(projDst, pointSrc);
 
