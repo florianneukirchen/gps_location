@@ -107,7 +107,8 @@ class MyAppState extends ChangeNotifier {
 
     // Throw exception if updating location failed
     if (errormsg != null) {
-      errormsg = "Used last known position, but: " + errormsg;
+      errormsg = "Saved waypoint with last known position, but could not update position:\n" + errormsg;
+      currentposition = null;
       throw Exception(errormsg);
     }
   } // addWaypoint
@@ -232,8 +233,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
     try {
       await callback(name);
     } on Exception catch (e) {
-      var msg = "Saved the last known position but unable to update position: ";
-      msg = msg + e.toString().substring(11);
+      var msg = e.toString().substring(11);
       scaffoldmessenger.showSnackBar(
           SnackBar(
             content: Text(msg),
