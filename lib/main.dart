@@ -313,12 +313,12 @@ class ShowLocationWGS84 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text("Speed: "
-                      + position.speed.toString()
+                      + position.speed.toStringAsFixed(1)
                       + " m/s (± "
-                      + position.speedAccuracy.toString() + ")"
+                      + position.speedAccuracy.toStringAsFixed(1) + ")"
                   ),
                   Text("Heading: "
-                      + position.heading.toString()
+                      + position.heading.toStringAsFixed(0)
                       + "° (± "
                       + position.headingAccuracy.toString() + "°)"
                   ),
