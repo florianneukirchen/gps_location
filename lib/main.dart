@@ -93,12 +93,13 @@ class MyAppState extends ChangeNotifier {
     }
 
     // Create Waypoint instance
+    var waypoint = Waypoint(currentposition!);
+
     name = name.trim(); // Remove leading and trailing whitespaces
     if (name == '') {
-      name = "Unnamed Waypoint";
+      name = "Unnamed WP (${asLocalTime(currentposition!.timestamp)})";
     }
 
-    var waypoint = Waypoint(currentposition!);
     waypoint.name = name;
 
     // Save Waypoint
