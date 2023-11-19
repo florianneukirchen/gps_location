@@ -360,6 +360,7 @@ class ShowLocationWGS84 extends StatelessWidget {
                 ],
               ),
               Text("Timestamp: " + position.timestamp.toString()),
+              Text("Local time: " + asLocalTime(position.timestamp))
             ],
           ),
         ));
@@ -502,4 +503,9 @@ class WaypointsPage extends StatelessWidget{
       },
     );
   }
+}
+
+
+String asLocalTime(DateTime datetime) {
+  return datetime.toLocal().toString().substring(0,16);
 }
