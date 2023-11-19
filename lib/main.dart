@@ -65,6 +65,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   void listenToLocationChanges() {
+    print("listen");
     final LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
@@ -264,6 +265,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
       return Center(
         child: Column(
           children: <Widget>[
+            ShowStatus(statusOK: (appState.positionStream != null)),
             ShowLocationWGS84(position: appState.currentposition!),
             ShowLocationUTM(position: appState.currentposition!),
             SizedBox(height:30),
@@ -333,6 +335,24 @@ class ShowLocationWGS84 extends StatelessWidget {
   }
 }
 
+
+class ShowStatus extends StatelessWidget {
+  const ShowStatus({
+    super.key,
+    required this.statusOK,
+  });
+
+  final bool statusOK;
+
+  @override
+  Widget build(BuildContext context) {
+    var msg = "Listening to GSP stream";
+    if (!statusOK) {
+      msg = "Not updating position";
+    }
+    return Text(msg);
+  }
+}
 
 class ShowLocationUTM extends StatelessWidget {
   const ShowLocationUTM({
