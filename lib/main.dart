@@ -61,6 +61,9 @@ class MyAppState extends ChangeNotifier {
       throw Exception(e.message);
     });
     currentposition = position;
+    if (positionStream == null) {
+      listenToLocationChanges();
+    }
     notifyListeners();
   }
 
