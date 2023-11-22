@@ -113,6 +113,11 @@ class MyAppState extends ChangeNotifier {
       throw Exception(errormsg);
     }
   } // addWaypoint
+
+  void deleteWaypoint(index) {
+    waypoints.removeAt(index);
+    notifyListeners();
+  }
 } // MyAppState
 
 // Get current location
@@ -342,15 +347,9 @@ class ShowLocationWGS84 extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Speed: "
-                      + position.speed.toStringAsFixed(1)
-                      + " m/s (± "
-                      + position.speedAccuracy.toStringAsFixed(1) + ")"
+                  Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
                   ),
-                  Text("Heading: "
-                      + position.heading.toStringAsFixed(0)
-                      + "° (± "
-                      + position.headingAccuracy.toString() + "°)"
+                  Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy}°)"
                   ),
                 ],
               ),
@@ -525,12 +524,20 @@ class WaypointsPage extends StatelessWidget{
     return ListView.builder(
       itemCount: appState.waypoints.length,
       itemBuilder: (BuildContext, int index) {
-        return ListTile(
-          leading: Icon(Icons.favorite),
-          title: Text(appState.waypoints[index].name),
-          subtitle: Text(appState.waypoints[index].latlon + "\n" +
-              asLocalTime(appState.waypoints[index].timestamp)),
-          isThreeLine: true,
+        final item = appState.waypoints[index];
+        return Dismissible(
+          key: Key(item.timestamp.toString()),
+          onDismissed: (direction) {
+            appState.deleteWaypoint(index);
+          },
+          background: Container(color: Colors.red),
+          child: ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(item.name),
+            subtitle: Text(item.latlon + "\n" +
+                asLocalTime(item.timestamp)),
+            isThreeLine: true,
+          ),
         );
       },
     );
