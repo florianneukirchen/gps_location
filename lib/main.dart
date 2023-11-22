@@ -31,15 +31,34 @@ class MyApp extends StatelessWidget {
 }
 
 class Waypoint {
-  final Position position;
+  final double latitude;
+  final double longitude;
+  final DateTime timestamp;
+
   String name = "Unnamed Waypoint";
 
-  Waypoint(this.position);
+  double altitude = 0;
+  double accuracy = 0;
+  double speed = 0;
+  double speedAccuracy = 0;
+  double heading = 0;
+  double headingAccuracy = 0;
 
-  DateTime get timestamp => position.timestamp;
-  double get longitude => position.longitude;
-  double get latitude => position.latitude;
-  String get latlon => "Lat, Lon: " + position.latitude.toString() + ", " + position.longitude.toString();
+  Waypoint(this.latitude, this.longitude, this.timestamp);
+
+  Waypoint.fromPosition(Position position)
+    : latitude = position.latitude,
+      longitude = position.longitude,
+      timestamp = position.timestamp,
+      altitude = position.altitude,
+      accuracy = position.accuracy,
+      speed = position.speed,
+      speedAccuracy = position.speedAccuracy,
+      heading = position.heading,
+      headingAccuracy = position.headingAccuracy;
+
+
+  String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
 }
 
 
@@ -93,7 +112,7 @@ class MyAppState extends ChangeNotifier {
     }
 
     // Create Waypoint instance
-    var waypoint = Waypoint(currentposition!);
+    var waypoint = Waypoint.fromPosition(currentposition!);
 
     name = name.trim(); // Remove leading and trailing whitespaces
     if (name == '') {
