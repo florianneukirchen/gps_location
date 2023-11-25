@@ -10,7 +10,9 @@ class MyMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var appState = context.watch<MyAppState>();
+
     return Expanded(
       child: FlutterMap(
         options: MapOptions(
@@ -22,15 +24,20 @@ class MyMap extends StatelessWidget {
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.app',
           ),
-          RichAttributionWidget(
-            attributions: [
-              TextSourceAttribution(
-                'OpenStreetMap contributors',
-                onTap: () =>
-                    launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+          SimpleAttributionWidget(
+            source: Text('OpenStreetMap'),
+            backgroundColor: Colors.transparent,
+          ),
+          MarkerLayer(
+            markers: [
+              Marker(
+                point: appState.poslatlng(),
+                width: 18,
+                height: 18,
+                child: Icon(Icons.my_location, size: 18),
               ),
             ],
-          ),
+          )
         ],
       ),
     );
