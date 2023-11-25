@@ -37,7 +37,7 @@ class WaypointsPage extends StatelessWidget{
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DetailScreen(waypoint: item),
+                    builder: (context) => DetailScreen(waypoint: item, wpindex: index),
                 ),
               );
             }
@@ -49,9 +49,10 @@ class WaypointsPage extends StatelessWidget{
 }
 
 class DetailScreen extends StatelessWidget {
-  const DetailScreen({super.key, required this.waypoint});
+  const DetailScreen({super.key, required this.waypoint, required this.wpindex });
 
   final Waypoint waypoint;
+  final int wpindex;
 
   @override
   Widget build(BuildContext context) {

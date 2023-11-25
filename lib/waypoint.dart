@@ -1,5 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter/material.dart';
 
 class Waypoint {
   final double latitude;
@@ -79,6 +81,15 @@ class Waypoint {
 
   LatLng toLatLng() {
     return LatLng(latitude, longitude);
+  }
+
+  Marker toMarker(Color? color) {
+    return Marker(
+      point: LatLng(latitude, longitude),
+      width: 18,
+      height: 18,
+      child: Icon(Icons.location_on, size: 18, color: color),
+    );
   }
 
   String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();

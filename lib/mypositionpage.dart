@@ -64,7 +64,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             const Text(
               'Current Location is unknown.',
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 _asyncBtnLoc(appState, scaffoldmessenger);
@@ -78,9 +78,9 @@ class _MyPositionPageState extends State<MyPositionPage> {
       return Center(
         child: Column(
           children: <Widget>[
-            ShowStatus(statusOK: (appState.positionStream != null)),
+            // ShowStatus(statusOK: (appState.positionStream != null)),
             ShowLocation(position: appState.currentposition!),
-            SizedBox(height:20),
+            // SizedBox(height:10),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -91,7 +91,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
                 ),
               ),
             ),
-            SizedBox(height:10),
+            // SizedBox(height:5),
             ElevatedButton(
               onPressed: () {
                 _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, textController.text);
