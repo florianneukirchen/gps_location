@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'myapp.dart';
+//import 'locationwidgets.dart';
 
 
 class WaypointsPage extends StatelessWidget{

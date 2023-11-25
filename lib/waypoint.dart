@@ -61,5 +61,20 @@ class Waypoint {
     }
   };
 
+  Position toPosition() {
+    return Position(
+      latitude: latitude,
+      longitude: longitude,
+      accuracy: accuracy,
+      altitude: altitude,
+      altitudeAccuracy: altitudeAccuracy,
+      timestamp: timestamp,
+      speed: speed,
+      heading: heading,
+      speedAccuracy: speedAccuracy,
+      headingAccuracy: headingAccuracy,
+    );
+  }
+
   String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
 }
