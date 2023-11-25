@@ -4,6 +4,75 @@ import 'package:proj4dart/proj4dart.dart';
 import 'myapp.dart';
 
 
+class ShowLocation extends StatelessWidget {
+  const ShowLocation({
+    super.key,
+    required this.position,
+  });
+
+  final Position position;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          ShowLocationWGS84(position: position),
+          ShowLocationUTM(position: position),
+          ShowTimestamp(position: position),
+        ]
+      ),
+    );
+  }
+}
+
+
+class ShowLocationWGS84 extends StatelessWidget {
+  const ShowLocationWGS84({
+    super.key,
+    required this.position,
+  });
+
+  final Position position;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Lat: " + position.latitude.toString() + "°"),
+                  Text("Lon: " + position.longitude.toString() + "°"),
+                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
+                  ),
+                  Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy}°)"
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Altitude (WGS84): " + position.altitude.toString() + " m"),
+                  Text("± " + position.altitudeAccuracy.toString() + " m"),
+                ],
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+
 class ShowTimestamp extends StatelessWidget {
   const ShowTimestamp({
     super.key,

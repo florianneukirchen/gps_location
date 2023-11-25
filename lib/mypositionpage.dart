@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
 import 'myapp.dart';
 import 'locationwidgets.dart';
 
@@ -79,9 +78,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
         child: Column(
           children: <Widget>[
             ShowStatus(statusOK: (appState.positionStream != null)),
-            ShowLocationWGS84(position: appState.currentposition!),
-            ShowLocationUTM(position: appState.currentposition!),
-            ShowTimestamp(position: appState.currentposition!),
+            ShowLocation(position: appState.currentposition!),
             SizedBox(height:30),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -109,50 +106,4 @@ class _MyPositionPageState extends State<MyPositionPage> {
     }
   }
 }
-
-class ShowLocationWGS84 extends StatelessWidget {
-  const ShowLocationWGS84({
-    super.key,
-    required this.position,
-  });
-
-  final Position position;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Lat: " + position.latitude.toString() + "°"),
-                  Text("Lon: " + position.longitude.toString() + "°"),
-                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
-                  ),
-                  Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy}°)"
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Altitude (WGS84): " + position.altitude.toString() + " m"),
-                  Text("± " + position.altitudeAccuracy.toString() + " m"),
-                ],
-              ),
-            ],
-          ),
-        ));
-  }
-}
-
 
