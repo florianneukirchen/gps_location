@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'waypoint.dart';
 import 'myhomepage.dart';
 import 'waypointstorage.dart';
@@ -146,6 +147,10 @@ class MyAppState extends ChangeNotifier {
     waypoints.removeAt(index);
     saveWaypoints();
     notifyListeners();
+  }
+
+  LatLng poslatlng() {
+    return LatLng(currentposition!.latitude, currentposition!.longitude);
   }
 } // MyAppState
 

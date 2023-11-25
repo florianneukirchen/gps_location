@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'myapp.dart';
 import 'locationwidgets.dart';
+import 'mapwidget.dart';
 
 class MyPositionPage extends StatefulWidget {
   const MyPositionPage({super.key});
@@ -79,7 +80,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
           children: <Widget>[
             ShowStatus(statusOK: (appState.positionStream != null)),
             ShowLocation(position: appState.currentposition!),
-            SizedBox(height:30),
+            SizedBox(height:20),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -90,7 +91,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
                 ),
               ),
             ),
-            SizedBox(height:30),
+            SizedBox(height:10),
             ElevatedButton(
               onPressed: () {
                 _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, textController.text);
@@ -100,6 +101,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
               },
               child: const Text('Save Waypoint'),
             ),
+            MyMap(),
           ],
         ),
       );

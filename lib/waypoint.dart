@@ -1,4 +1,5 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class Waypoint {
   final double latitude;
@@ -74,6 +75,10 @@ class Waypoint {
       speedAccuracy: speedAccuracy,
       headingAccuracy: headingAccuracy,
     );
+  }
+
+  LatLng toLatLng() {
+    return LatLng(latitude, longitude);
   }
 
   String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
