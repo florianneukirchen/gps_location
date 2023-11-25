@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'mypositionpage.dart';
 import 'waypointspage.dart';
 import 'myapp.dart';
+import 'mapwidget.dart';
 
 
 
@@ -28,6 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
         page = MyPositionPage();
         break;
       case 1:
+        page = MyMapPage();
+        break;
+      case 2:
         page = WaypointsPage();
       default:
         throw UnimplementedError("No widget for selected index");
@@ -54,6 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
             label: "Current Position",
           ),
           NavigationDestination(
+              icon: Icon(Icons.map),
+              label: "Map",
+          ),
+          NavigationDestination(
               icon: Badge(
                 label: Text(appState.waypoints.length.toString()),
                 isLabelVisible: (appState.waypoints.length > 0),
@@ -64,6 +72,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: page,
+    );
+  }
+}
+
+class MyMapPage extends StatelessWidget {
+  const MyMapPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [MyMap(),]
     );
   }
 }
