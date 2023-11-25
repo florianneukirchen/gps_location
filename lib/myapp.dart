@@ -32,6 +32,15 @@ class MyApp extends StatelessWidget {
 
 
 class MyAppState extends ChangeNotifier {
+  // Constructor to init appstate with waypoints and position
+  MyAppState(){
+    restoreWaypoints();
+    try {
+      updateLocation();
+    } catch (e) {
+      // Do nothing, the user will get the "Current Position Unknown" page
+    }
+  }
 
   Position? currentposition;
   StreamSubscription<Position>? positionStream;
