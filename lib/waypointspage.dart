@@ -19,7 +19,8 @@ class WaypointsPage extends StatelessWidget{
       itemBuilder: (BuildContext, int index) {
         final item = appState.waypoints[index];
         return Dismissible(
-          key: Key(item.timestamp.toString()),
+          key: UniqueKey(),
+          // key: Key(item.timestamp.toString()),
           onDismissed: (direction) {
             appState.deleteWaypoint(index);
           },

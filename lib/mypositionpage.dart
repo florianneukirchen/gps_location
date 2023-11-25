@@ -23,9 +23,12 @@ class _MyPositionPageState extends State<MyPositionPage> {
     super.dispose();
   }
 
-  void _asyncBtnLoc(callback, scaffoldmessenger) async {
+  void _asyncBtnLoc(appState, scaffoldmessenger) async {
+    if (appState.waypoints.length == 0) {
+      await appState.restoreWaypoints();
+    }
     try {
-      await callback();
+      await appState.updateLocation();
     } on Exception catch (e) {
       var msg = e.toString().substring(11);
       scaffoldmessenger.showSnackBar(
@@ -64,7 +67,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                _asyncBtnLoc(appState.updateLocation, scaffoldmessenger);
+                _asyncBtnLoc(appState, scaffoldmessenger);
               },
               child: const Text('Get Location'),
             ),

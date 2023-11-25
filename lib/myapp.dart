@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'waypoint.dart';
 import 'myhomepage.dart';
+import 'waypointstorage.dart';
+import 'dart:convert';
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -34,11 +37,41 @@ class MyAppState extends ChangeNotifier {
   StreamSubscription<Position>? positionStream;
   var waypoints = <Waypoint>[];
 
+  final storage = WaypointStorage();
+
+
   // Close the position stream before exiting the app.
   @override
   void dispose() {
     positionStream?.cancel();
     super.dispose();
+  }
+
+  void restoreWaypoints() async {
+    var content = "";
+
+    try {
+      content = await storage.readWaypointFile();
+      print(content);
+    } catch (e) {
+      // Do nothing, probably the file does not exist yet
+      return;
+    }
+
+    var jsonResponse = jsonDecode(content);
+
+    for (var wp in jsonResponse) {
+      final waypoint = Waypoint.fromJson(wp);
+      waypoints.add(waypoint);
+    }
+
+    notifyListeners();
+
+  }
+
+  void saveWaypoints() {
+    var json = waypoints.map((waypoint) => waypoint.toJson()).toList();
+    storage.writeWaypointFile(jsonEncode(json));
   }
 
   void updateLocation() async {
@@ -54,7 +87,7 @@ class MyAppState extends ChangeNotifier {
 
   void listenToLocationChanges() {
     print("listen");
-    final LocationSettings locationSettings = const LocationSettings(
+    const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
     );
@@ -89,6 +122,7 @@ class MyAppState extends ChangeNotifier {
 
     // Save Waypoint
     waypoints.add(waypoint);
+    saveWaypoints();
     notifyListeners();
 
     // Throw exception if updating location failed
@@ -101,6 +135,7 @@ class MyAppState extends ChangeNotifier {
 
   void deleteWaypoint(index) {
     waypoints.removeAt(index);
+    saveWaypoints();
     notifyListeners();
   }
 } // MyAppState
