@@ -5,9 +5,14 @@ import 'package:provider/provider.dart';
 import 'myapp.dart';
 
 class MyMap extends StatelessWidget {
-  const MyMap({super.key, this.activeindex,});
+  const MyMap({
+    super.key,
+    this.activeindex,
+    this.linkmarkers = false,
+  });
 
   final int? activeindex;
+  final bool linkmarkers;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class MyMap extends StatelessWidget {
               ),
             ],
           ),
-          wpMarkerLayer(activeindex: activeindex),
+          wpMarkerLayer(activeindex: activeindex, linkmarkers: linkmarkers),
         ],
       ),
     );
@@ -61,9 +66,10 @@ class MyMap extends StatelessWidget {
 
 
 class wpMarkerLayer extends StatelessWidget {
-  const wpMarkerLayer({super.key, this.activeindex,});
+  const wpMarkerLayer({super.key, this.activeindex, required this.linkmarkers});
 
   final int? activeindex;
+  final bool linkmarkers;
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +82,23 @@ class wpMarkerLayer extends StatelessWidget {
         .colorScheme
         .primary;
 
-    for (var i = 0; i < waypoints.length; i++) {
-      final wp = waypoints[i];
-      if (i == activeindex) {
-        color = activeColor;
-      } else {
-        color = null;
+    if (linkmarkers) {
+      for (var i = 0; i < waypoints.length; i++) {
+        final wp = waypoints[i];
+        markers.add(wp.toLinkMarker(i));
       }
-      markers.add(wp.toMarker(color));
+    } else {
+      for (var i = 0; i < waypoints.length; i++) {
+        final wp = waypoints[i];
+        if (i == activeindex) {
+          color = activeColor;
+        } else {
+          color = null;
+        }
+        markers.add(wp.toMarker(color));
+      }
     }
+
 
     return MarkerLayer(
       markers: markers,

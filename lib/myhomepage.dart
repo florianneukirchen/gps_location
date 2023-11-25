@@ -82,7 +82,7 @@ class MyMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [MyMap(),]
+      children: [MyMap(linkmarkers: true),]
     );
   }
 }

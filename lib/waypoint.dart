@@ -2,6 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/material.dart';
+import 'waypointspage.dart';
 
 class Waypoint {
   final double latitude;
@@ -89,6 +90,26 @@ class Waypoint {
       width: 18,
       height: 18,
       child: Icon(Icons.location_on, size: 18, color: color),
+    );
+  }
+
+  Marker toLinkMarker(int index) {
+    return Marker(
+      point: LatLng(latitude, longitude),
+      child: Builder(builder: (context) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailScreen(waypoint: this, wpindex: index),
+              ),
+            );
+          },
+          child: Icon(Icons.location_on, size: 18),
+        );
+      }),
+
     );
   }
 
