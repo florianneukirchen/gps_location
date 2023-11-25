@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'myapp.dart';
 import 'waypoint.dart';
 import 'locationwidgets.dart';
-
+import 'mapwidget.dart';
 
 class WaypointsPage extends StatelessWidget{
   @override
@@ -64,6 +64,7 @@ class DetailScreen extends StatelessWidget {
         children: [
           BigCard(text: waypoint.name),
           ShowLocation(position: waypoint.toPosition()),
+          MyMap(activeindex: wpindex,),
         ],
       ),
       );
@@ -92,7 +93,7 @@ class BigCard extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(text,
               style: style,
             ),
