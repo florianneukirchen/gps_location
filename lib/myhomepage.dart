@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
           NavigationDestination(
               icon: Badge(
                 label: Text(appState.waypoints.length.toString()),
+                isLabelVisible: (appState.waypoints.length > 0),
                 child: Icon(Icons.edit_location_alt_outlined),
               ),
               label: "Waypoints"
