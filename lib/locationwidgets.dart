@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj4dart/proj4dart.dart';
+import 'package:provider/provider.dart';
+import 'package:latlong2/latlong.dart';
 import 'myapp.dart';
 
 
@@ -104,7 +106,38 @@ class ShowTimestamp extends StatelessWidget {
   }
 }
 
+class ShowDistance extends StatelessWidget {
+  const ShowDistance({
+    super.key,
+    required this.latlng,
+  });
 
+  final LatLng latlng;
+
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    final current = appState.poslatlng();
+    Distance distance = new Distance();
+
+    return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                      "Distance: ${(distance(current, latlng) / 1000).toStringAsFixed(1)} km"
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
+  }
+}
 
 
 class ShowStatus extends StatelessWidget {

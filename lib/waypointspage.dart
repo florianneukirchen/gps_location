@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:latlong2/latlong.dart';
 import 'myapp.dart';
 import 'waypoint.dart';
 import 'locationwidgets.dart';
@@ -9,6 +10,9 @@ class WaypointsPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    final current = appState.poslatlng();
+    Distance distance = new Distance();
+
 
     if (appState.waypoints.isEmpty) {
       return Center(
@@ -31,7 +35,9 @@ class WaypointsPage extends StatelessWidget{
             leading: Icon(Icons.favorite),
             title: Text(item.name),
             subtitle: Text(item.latlon + "\n" +
-                asLocalTime(item.timestamp)),
+                asLocalTime(item.timestamp)
+                + " → ${(distance(current, item.toLatLng()) / 1000).toStringAsFixed(1)} km"
+            ),
             isThreeLine: true,
             onTap: () {
               Navigator.push(
@@ -64,6 +70,7 @@ class DetailScreen extends StatelessWidget {
         children: [
           BigCard(text: waypoint.name),
           ShowLocation(position: waypoint.toPosition()),
+          ShowDistance(latlng: waypoint.toLatLng(),),
           MyMap(activeindex: wpindex,),
         ],
       ),

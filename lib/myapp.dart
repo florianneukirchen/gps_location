@@ -195,3 +195,4 @@ Future<Position> getCurrentLocation() async {
 String asLocalTime(DateTime datetime) {
   return datetime.toLocal().toString().substring(0,16);
 }
+
