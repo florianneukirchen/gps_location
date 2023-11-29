@@ -110,6 +110,39 @@ class MyAppState extends ChangeNotifier {
     );
   }
 
+  void sortWaypoints() {
+    final method = 1;
+    switch (method) {
+      case 0:
+        // Sort by timestamp, old to recent
+        waypoints.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        break;
+      case 1:
+        // Sort by timestamp, recent to old
+        waypoints.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+        break;
+      case 2:
+        // Sort by Distance, close to far
+        waypoints.sort(sortCompareByDistance);
+      default:
+        throw UnimplementedError("Sort method not implemented");
+    }
+  }
+
+  int sortCompareByDistance(Waypoint a, Waypoint b) {
+    Distance distance = Distance();
+    final dist_a = distance(poslatlng(), a.toLatLng());
+    final dist_b = distance(poslatlng(), b.toLatLng());
+
+    if (dist_a < dist_b) {
+      return -1;
+    } else if (dist_a > dist_b) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   void addWaypoint(String name) async {
     String? errormsg;
 
@@ -132,6 +165,7 @@ class MyAppState extends ChangeNotifier {
 
     // Save Waypoint
     waypoints.add(waypoint);
+    sortWaypoints();
     saveWaypoints();
     notifyListeners();
 

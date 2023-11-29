@@ -115,3 +115,10 @@ class Waypoint {
 
   String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
 }
+
+
+// Compare functions for sorting
+
+
+
+
