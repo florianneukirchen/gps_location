@@ -42,8 +42,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: Icon(Icons.menu),
         title: Text(widget.title),
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         backgroundColor: Theme.of(context).colorScheme.primary,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              semanticLabel: 'search',
+            ),
+            onPressed: () {
+              // TODO
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.swap_vert,
+              semanticLabel: "sort order",
+            ),
+            onPressed: () {
+              //TODO
+            }
+          )
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
