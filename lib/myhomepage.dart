@@ -6,7 +6,6 @@ import 'myapp.dart';
 import 'mapwidget.dart';
 
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -19,6 +18,57 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
 
+  // For the switching in the dialog
+  //SortOrder _selectedSortOrder = SortOrder.nameAscending;
+
+  void _showSortOrderDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sort Order for Waypoints"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _buildRadioListTile('Time Ascending', SortOrder.timeAscending),
+              _buildRadioListTile('Time Descending', SortOrder.timeDescending),
+              _buildRadioListTile('Name Ascending', SortOrder.nameAscending),
+              _buildRadioListTile('Name Descending', SortOrder.nameDescending),
+              _buildRadioListTile('Distance Ascending', SortOrder.distanceAscending),
+              _buildRadioListTile('Distance Descending', SortOrder.distanceDescending),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            )
+          ]
+        );
+      },
+    );
+  }
+
+  Widget _buildRadioListTile(String title, SortOrder value) {
+    var appState = context.watch<MyAppState>();
+    return ListTile(
+      title: Text(title),
+      leading: Radio<SortOrder>(
+        value: value,
+        groupValue: appState.sortOrder,
+        onChanged: (SortOrder? selectedValue) {
+          if (selectedValue != null) {
+            appState.sortOrder = selectedValue;
+            Navigator.of(context).pop();
+            // Apply sort order logic here
+            appState.sortWaypoints();
+          };
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Icons.swap_vert,
               semanticLabel: "sort order",
             ),
-            onPressed: () {
-              //TODO
-            }
+            onPressed: _showSortOrderDialog,
           )
         ],
       ),

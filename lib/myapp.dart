@@ -8,6 +8,8 @@ import 'myhomepage.dart';
 import 'waypointstorage.dart';
 import 'dart:convert';
 
+enum SortOrder { timeAscending, timeDescending, nameAscending, nameDescending, distanceAscending, distanceDescending }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -39,7 +41,8 @@ class MyAppState extends ChangeNotifier {
     try {
       updateLocation();
     } catch (e) {
-      // Do nothing, the user will get the "Current Position Unknown" page
+      // Do nothing if position is not known
+      // the user will get the "Current Position Unknown" page
     }
   }
 
@@ -49,6 +52,7 @@ class MyAppState extends ChangeNotifier {
 
   final storage = WaypointStorage();
 
+  SortOrder sortOrder = SortOrder.timeAscending;
 
   // Close the position stream before exiting the app.
   @override
@@ -111,25 +115,25 @@ class MyAppState extends ChangeNotifier {
   }
 
   void sortWaypoints() {
-    final method = 2;
-    switch (method) {
-      case 0:
+    print(sortOrder);
+    switch (sortOrder) {
+      case SortOrder.timeDescending:
         // Sort by timestamp, old to recent
         waypoints.sort((a, b) => a.timestamp.compareTo(b.timestamp));
         break;
-      case 1:
+      case SortOrder.timeAscending:
         // Sort by timestamp, recent to old
         waypoints.sort((a, b) => b.timestamp.compareTo(a.timestamp));
         break;
-      case 2:
+      case SortOrder.nameAscending:
         // Sort by name A-Z
         waypoints.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         break;
-      case 3:
+      case SortOrder.nameDescending:
       // Sort by name Z-A
         waypoints.sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
         break;
-      case 4:
+      case SortOrder.distanceAscending:
         // Sort by Distance, from close to far
         // Fall-back if current position not known
         if (currentposition == null) {
@@ -137,6 +141,15 @@ class MyAppState extends ChangeNotifier {
           break;
         }
         waypoints.sort(sortCompareByDistance);
+        break;
+      case SortOrder.distanceDescending:
+      // Fall-back if current position not known
+        if (currentposition == null) {
+          waypoints.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+          break;
+        }
+        waypoints.sort((sortCompareByDistance));
+        waypoints = waypoints.reversed.toList();
         break;
       default:
         throw UnimplementedError("Sort method not implemented");
