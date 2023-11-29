@@ -11,7 +11,6 @@ class WaypointsPage extends StatelessWidget{
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     final current = appState.poslatlng();
-    Distance distance = new Distance();
 
 
     if (appState.waypoints.isEmpty) {
@@ -36,7 +35,7 @@ class WaypointsPage extends StatelessWidget{
             title: Text(item.name),
             subtitle: Text(item.latlon + "\n" +
                 asLocalTime(item.timestamp)
-                + " → ${(distance(current, item.toLatLng()) / 1000).toStringAsFixed(1)} km"
+                + distanceMessage(current, item.toLatLng())
             ),
             isThreeLine: true,
             onTap: () {
@@ -53,6 +52,18 @@ class WaypointsPage extends StatelessWidget{
     );
   }
 }
+
+String distanceMessage(LatLng? a, LatLng b) {
+  if (a == null) {
+    return "";
+  } else {
+    Distance distance = new Distance();
+    return " (➞ ${(distance(a, b) / 1000).toStringAsFixed(1)} km)";
+  }
+
+
+}
+
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({super.key, required this.waypoint, required this.wpindex });

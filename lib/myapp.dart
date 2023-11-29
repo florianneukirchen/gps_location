@@ -122,7 +122,12 @@ class MyAppState extends ChangeNotifier {
         waypoints.sort((a, b) => b.timestamp.compareTo(a.timestamp));
         break;
       case 2:
-        // Sort by Distance, close to far
+        // Sort by Distance, from close to far
+        // Fall back if current position not known
+        if (currentposition == null) {
+          // Do not sort
+          return;
+        }
         waypoints.sort(sortCompareByDistance);
       default:
         throw UnimplementedError("Sort method not implemented");
@@ -131,8 +136,8 @@ class MyAppState extends ChangeNotifier {
 
   int sortCompareByDistance(Waypoint a, Waypoint b) {
     Distance distance = Distance();
-    final dist_a = distance(poslatlng(), a.toLatLng());
-    final dist_b = distance(poslatlng(), b.toLatLng());
+    final dist_a = distance(poslatlng()!, a.toLatLng());
+    final dist_b = distance(poslatlng()!, b.toLatLng());
 
     if (dist_a < dist_b) {
       return -1;
@@ -183,7 +188,10 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  LatLng poslatlng() {
+  LatLng? poslatlng() {
+    if (currentposition == null) {
+      return null;
+    }
     return LatLng(currentposition!.latitude, currentposition!.longitude);
   }
 } // MyAppState

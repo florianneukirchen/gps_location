@@ -120,6 +120,13 @@ class ShowDistance extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     final current = appState.poslatlng();
     Distance distance = new Distance();
+    String msg;
+
+    if (current == null) {
+      msg = "Current position not known";
+    } else {
+      msg = "Distance: ${(distance(current, latlng) / 1000).toStringAsFixed(1)} km";
+    }
 
     return Card(
         child: Padding(
@@ -129,7 +136,7 @@ class ShowDistance extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                      "Distance: ${(distance(current, latlng) / 1000).toStringAsFixed(1)} km"
+                      msg
                   ),
                 ],
               ),

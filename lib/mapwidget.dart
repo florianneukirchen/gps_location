@@ -18,12 +18,16 @@ class MyMap extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var appState = context.watch<MyAppState>();
-    LatLng initialCenter;
+    LatLng initialCenter = LatLng(0,0);
 
-    if (activeindex == null) {
-      initialCenter = appState.poslatlng();
-    } else {
+    if (activeindex != null) {
       initialCenter = appState.waypoints[activeindex!].toLatLng();
+    } else if (appState.currentposition != null) {
+      initialCenter = appState.poslatlng()!;
+    } else if (appState.waypoints.isNotEmpty) {
+      // Use the last waypoint of the list. If not keep LatLng 0,0
+      initialCenter = appState.waypoints.last.toLatLng();
+
     }
 
     return Expanded(
@@ -41,10 +45,10 @@ class MyMap extends StatelessWidget {
             source: Text('OpenStreetMap'),
             backgroundColor: Colors.transparent,
           ),
-          MarkerLayer(
+          if (appState.currentposition != null) MarkerLayer(
             markers: [
               Marker(
-                point: appState.poslatlng(),
+                point: appState.poslatlng()!,
                 width: 18,
                 height: 18,
                 child: Icon(
