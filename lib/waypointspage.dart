@@ -31,7 +31,7 @@ class WaypointsPage extends StatelessWidget{
           },
           background: Container(color: Colors.red),
           child: ListTile(
-            leading: Icon(Icons.favorite),
+            leading: Icon(Icons.location_on),
             title: Text(item.name),
             subtitle: Text(item.latlon + "\n" +
                 asLocalTime(item.timestamp)

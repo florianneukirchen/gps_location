@@ -99,15 +99,6 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.search,
-              semanticLabel: 'search',
-            ),
-            onPressed: () {
-              // TODO
-            },
-          ),
-          IconButton(
-            icon: Icon(
               Icons.swap_vert,
               semanticLabel: "sort order",
             ),

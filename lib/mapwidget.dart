@@ -34,7 +34,7 @@ class MyMap extends StatelessWidget {
       child: FlutterMap(
         options: MapOptions(
           initialCenter: initialCenter,
-          initialZoom: 14,
+          initialZoom: 16,
         ),
         children: [
           TileLayer(
