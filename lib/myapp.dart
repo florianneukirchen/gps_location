@@ -111,7 +111,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   void sortWaypoints() {
-    final method = 1;
+    final method = 2;
     switch (method) {
       case 0:
         // Sort by timestamp, old to recent
@@ -122,13 +122,22 @@ class MyAppState extends ChangeNotifier {
         waypoints.sort((a, b) => b.timestamp.compareTo(a.timestamp));
         break;
       case 2:
+        // Sort by name A-Z
+        waypoints.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        break;
+      case 3:
+      // Sort by name Z-A
+        waypoints.sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+        break;
+      case 4:
         // Sort by Distance, from close to far
-        // Fall back if current position not known
+        // Fall-back if current position not known
         if (currentposition == null) {
-          // Do not sort
-          return;
+          waypoints.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+          break;
         }
         waypoints.sort(sortCompareByDistance);
+        break;
       default:
         throw UnimplementedError("Sort method not implemented");
     }
