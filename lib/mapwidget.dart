@@ -58,6 +58,7 @@ class MyMap extends StatelessWidget {
                 ),
               ),
             ],
+            alignment: Alignment.center,
           ),
           wpMarkerLayer(activeindex: activeindex, linkmarkers: linkmarkers),
         ],
@@ -80,7 +81,7 @@ class wpMarkerLayer extends StatelessWidget {
     final appState = context.watch<MyAppState>();
     final waypoints = appState.waypoints;
     var markers = <Marker>[];
-    Color? color;
+
     final activeColor = Theme
         .of(context)
         .colorScheme
@@ -94,12 +95,13 @@ class wpMarkerLayer extends StatelessWidget {
     } else {
       for (var i = 0; i < waypoints.length; i++) {
         final wp = waypoints[i];
-        if (i == activeindex) {
-          color = activeColor;
-        } else {
-          color = null;
+        if (i != activeindex) {
+          markers.add(wp.toMarker(null));
         }
-        markers.add(wp.toMarker(color));
+        if (activeindex != null) {
+          markers.add(waypoints[activeindex!].toMarker(activeColor));
+        }
+
       }
     }
 
@@ -107,7 +109,7 @@ class wpMarkerLayer extends StatelessWidget {
     return MarkerLayer(
       markers: markers,
       // Keine Ahnung warum, aber das Ergebnis ist bottomCenter
-      alignment: Alignment.topCenter,
+      alignment: Alignment.center,
     );
   }
 }
