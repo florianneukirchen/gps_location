@@ -139,10 +139,12 @@ class BigCard extends StatelessWidget {
       color: theme.colorScheme.primary,
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(text,
-              style: style,
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(text,
+                style: style,
+              ),
             ),
           ),
         ],
