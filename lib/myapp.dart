@@ -88,7 +88,7 @@ class MyAppState extends ChangeNotifier {
     storage.writeWaypointFile(jsonEncode(json));
   }
 
-  void updateLocation() async {
+  Future<void> updateLocation() async {
     var position = await getCurrentLocation().catchError((e) {
       throw Exception(e.message);
     });
@@ -170,7 +170,7 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
-  void addWaypoint(String name) async {
+  Future<void> addWaypoint(String name) async {
     String? errormsg;
 
     // Try to update position

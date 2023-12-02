@@ -20,7 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Confirm Dialog to delete waypoints
   void _confirmDeleteWaypoints() {
-    // var appState = context.watch<MyAppState>();
     showDialog(
       context: context,
       builder: (BuildContext context) {

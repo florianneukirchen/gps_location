@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'myapp.dart';
 
-
+// Can be used for current position as well as for waypoint details
 class ShowLocation extends StatelessWidget {
   const ShowLocation({
     super.key,
@@ -117,8 +117,7 @@ class ShowDistance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    final current = appState.poslatlng();
+    final current = Provider.of<MyAppState>(context).poslatlng();
     Distance distance = new Distance();
     String msg;
 

@@ -23,12 +23,9 @@ class _MyPositionPageState extends State<MyPositionPage> {
     super.dispose();
   }
 
-  void _asyncBtnLoc(appState, scaffoldmessenger) async {
-    if (appState.waypoints.length == 0) {
-      await appState.restoreWaypoints();
-    }
+  void _asyncBtnLoc(scaffoldmessenger) async {
     try {
-      await appState.updateLocation();
+      await Provider.of<MyAppState>(context, listen: false).updateLocation();
     } on Exception catch (e) {
       var msg = e.toString().substring(11);
       scaffoldmessenger.showSnackBar(
@@ -39,9 +36,9 @@ class _MyPositionPageState extends State<MyPositionPage> {
     }
   }
 
-  void _asyncBtnWP(callback, scaffoldmessenger, name) async {
+  void _asyncBtnWP(scaffoldmessenger, name) async {
     try {
-      await callback(name);
+      await Provider.of<MyAppState>(context, listen: false).addWaypoint(name);
     } on Exception catch (e) {
       var msg = e.toString().substring(11);
       scaffoldmessenger.showSnackBar(
@@ -67,7 +64,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                _asyncBtnLoc(appState, scaffoldmessenger);
+                _asyncBtnLoc(scaffoldmessenger);
               },
               child: const Text('Get Location'),
             ),
@@ -94,7 +91,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
             // SizedBox(height:5),
             ElevatedButton(
               onPressed: () {
-                _asyncBtnWP(appState.addWaypoint, scaffoldmessenger, textController.text);
+                _asyncBtnWP(scaffoldmessenger, textController.text);
                 textController.clear();
                 // hide keybord
                 FocusManager.instance.primaryFocus?.unfocus();
