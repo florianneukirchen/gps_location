@@ -68,15 +68,15 @@ class ShowLocationWGS84 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(asEW_NW(position.latitude, position.longitude)),
-                    Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                    Text("(± " + position.accuracy.toStringAsFixed(0) + " m)"),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
+                    Text("Speed: ${position.speed.toStringAsFixed(2)} m/s"
                     ),
-                    Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy.toStringAsFixed(0)}°)"
+                    Text("Heading: ${position.heading.toStringAsFixed(0)}°"
                     ),
                   ],
                 ),
@@ -84,7 +84,6 @@ class ShowLocationWGS84 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text("Altitude (WGS84): " + position.altitude.toStringAsFixed(1) + " m"),
-                    Text("± " + position.altitudeAccuracy.toStringAsFixed(1) + " m"),
                   ],
                 ),
               ],
@@ -145,7 +144,7 @@ class ShowDistance extends StatelessWidget {
     if (current == null) {
       msg = "Current position not known";
     } else {
-      msg = "Distance: ${(distance(current, latlng) / 1000).toStringAsFixed(1)} km";
+      msg = "Distance: ${(distance(current, latlng) / 1000).toStringAsFixed(2)} km";
     }
 
     return Card(
@@ -254,7 +253,7 @@ class ShowLocationUTM extends StatelessWidget {
                 children: [
                   Text("X: " + pointutm.x.toStringAsFixed(1) + " m"),
                   Text("Y: " + pointutm.y.toStringAsFixed(1) + " m"),
-                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                  Text("(± " + position.accuracy.toStringAsFixed(0) + " m)"),
                 ],
               ),
               /*

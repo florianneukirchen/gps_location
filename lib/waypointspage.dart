@@ -60,7 +60,7 @@ String distanceMessage(LatLng? a, LatLng b) {
     return "";
   } else {
     Distance distance = new Distance();
-    return " (➞ ${(distance(a, b) / 1000).toStringAsFixed(1)} km)";
+    return " (➞ ${(distance(a, b) / 1000).toStringAsFixed(2)} km)";
   }
 
 
