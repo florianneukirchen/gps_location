@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:convert';
 import 'myapp.dart';
 import 'waypoint.dart';
 import 'locationwidgets.dart';
@@ -71,11 +73,38 @@ class DetailScreen extends StatelessWidget {
   final Waypoint waypoint;
   final int wpindex;
 
+  _handleClick(int item) {
+    switch (item) {
+      case 0:
+        {
+          Share.share(asEW_NW(waypoint.latitude, waypoint.longitude), subject: waypoint.name);
+        }
+        break;
+      case 1:
+        {
+          var json = waypoint.toJson();
+          Share.share(jsonEncode(json), subject: waypoint.name);
+        }
+        break;
+      default:
+        throw UnimplementedError("Not implemented");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Waypoint Details'),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+            onSelected: (item) => _handleClick(item),
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(value: 0, child: Text('Share as Lat Lon')),
+              PopupMenuItem<int>(value: 1, child: Text('Share as JSON')),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
