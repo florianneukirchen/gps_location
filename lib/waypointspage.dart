@@ -33,7 +33,7 @@ class WaypointsPage extends StatelessWidget{
           child: ListTile(
             leading: Icon(Icons.location_on),
             title: Text(item.name),
-            subtitle: Text(item.latlon + "\n" +
+            subtitle: Text(asEW_NW(item.latitude, item.longitude) + "\n" +
                 asLocalTime(item.timestamp)
                 + distanceMessage(current, item.toLatLng())
             ),

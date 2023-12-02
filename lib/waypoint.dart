@@ -113,7 +113,7 @@ class Waypoint {
     );
   }
 
-  String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
+  // String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
 }
 
 

@@ -28,6 +28,21 @@ class ShowLocation extends StatelessWidget {
   }
 }
 
+String asEW_NW(double lat, double lon){
+  String slat;
+  String slon;
+  if (lat >= 0) {
+    slat = lat.toString() + "° N ";
+  } else {
+    slat = lat.abs().toString() + "° S ";
+  }
+  if (lon >= 0) {
+    slon = lon.toString() + "° E";
+  } else {
+    slon = lon.abs().toString() + "° W";
+  }
+  return slat + slon;
+}
 
 class ShowLocationWGS84 extends StatelessWidget {
   const ShowLocationWGS84({
@@ -47,8 +62,7 @@ class ShowLocationWGS84 extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Lat: " + position.latitude.toString() + "°"),
-                  Text("Lon: " + position.longitude.toString() + "°"),
+                  Text("Lat, Lon: " + asEW_NW(position.latitude, position.longitude)),
                   Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
                 ],
               ),
