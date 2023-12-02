@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'mypositionpage.dart';
 import 'waypointspage.dart';
 import 'myapp.dart';
@@ -16,9 +17,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Init index of Navigation (current page)
   var selectedIndex = 0;
 
-  // Confirm Dialog to delete waypoints
+  // Confirmation dialog to delete waypoints
   void _confirmDeleteWaypoints() {
     showDialog(
       context: context,
@@ -44,6 +46,11 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       }
     );
+  }
+
+  void _sharewaypoints() async {
+    final filepath = await Provider.of<MyAppState>(context, listen: false).storage.filepath();
+    Share.shareXFiles([XFile(filepath)], text: 'Great picture');
   }
 
 
@@ -147,9 +154,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: const Text('Item 1'),
+              title: const Text('Share Waypoints'),
               onTap: () {
-                // Bla
+                Navigator.pop(context);
+                _sharewaypoints();
               },
             ),
             ListTile(
