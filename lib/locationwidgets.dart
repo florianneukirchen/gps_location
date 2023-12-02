@@ -56,7 +56,7 @@ class ShowLocationWGS84 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async{
+      onLongPress: () async{
         await Clipboard.setData(ClipboardData(text: "your text"));
       },
       child: Card(
