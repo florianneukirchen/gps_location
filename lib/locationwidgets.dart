@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj4dart/proj4dart.dart';
 import 'package:provider/provider.dart';
@@ -54,37 +55,43 @@ class ShowLocationWGS84 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Lat, Lon: " + asEW_NW(position.latitude, position.longitude)),
-                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
-                  ),
-                  Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy}°)"
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Altitude (WGS84): " + position.altitude.toString() + " m"),
-                  Text("± " + position.altitudeAccuracy.toString() + " m"),
-                ],
-              ),
-            ],
+    return GestureDetector(
+      onTap: () async{
+        await Clipboard.setData(ClipboardData(text: "your text"));
+      },
+      child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Lat, Lon: " + asEW_NW(position.latitude, position.longitude)),
+                    Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Speed: ${position.speed.toStringAsFixed(1)} m/s (± ${position.speedAccuracy.toStringAsFixed(1)})"
+                    ),
+                    Text("Heading: ${position.heading.toStringAsFixed(0)}° (± ${position.headingAccuracy}°)"
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Altitude (WGS84): " + position.altitude.toString() + " m"),
+                    Text("± " + position.altitudeAccuracy.toString() + " m"),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ));
+      ),
+    );
   }
 }
 
