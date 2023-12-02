@@ -57,7 +57,7 @@ class ShowLocationWGS84 extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () async{
-        await Clipboard.setData(ClipboardData(text: "your text"));
+        await Clipboard.setData(ClipboardData(text: asEW_NW(position.latitude, position.longitude)));
       },
       child: Card(
           child: Padding(
@@ -197,37 +197,50 @@ class ShowLocationUTM extends StatelessWidget {
     final utmzone = getUTMzone(position);
     final (pointutm, epsg) = reprojectUTM(position, utmzone);
     // final (pointetrs89, epsg89) = reprojectUTM(position, utmzone, etrs89: true);
-    return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Text("UTM Zone $utmzone N ($epsg)"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("X: " + pointutm.x.toStringAsFixed(0) + " m"),
-                  Text("Y: " + pointutm.y.toStringAsFixed(0) + " m"),
-                  Text("(± " + position.accuracy.toStringAsFixed(0) + " m)"),
-                ],
-              ),
-              /*
-              SizedBox(height: 8),
-              Text("UTM Zone $utmzone N (ETRS89, $epsg89)"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("X: " + pointetrs89.x.toStringAsFixed(1) + " m"),
-                  Text("Y: " + pointetrs89.y.toStringAsFixed(1) + " m"),
-                  Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
-                ],
-              ),
+    return GestureDetector(
+      onLongPress: () async{
+        await Clipboard.setData(
+            ClipboardData(
+                text: utmzone.toString()
+                    + " N "
+                    + pointutm.x.toStringAsFixed(0)
+                    + " " + pointutm.y.toStringAsFixed(0)
+                    + " ("+ epsg + ")"
+            )
+        );
+      },
+      child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text("UTM Zone $utmzone N ($epsg)"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("X: " + pointutm.x.toStringAsFixed(0) + " m"),
+                    Text("Y: " + pointutm.y.toStringAsFixed(0) + " m"),
+                    Text("(± " + position.accuracy.toStringAsFixed(0) + " m)"),
+                  ],
+                ),
+                /*
+                SizedBox(height: 8),
+                Text("UTM Zone $utmzone N (ETRS89, $epsg89)"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("X: " + pointetrs89.x.toStringAsFixed(1) + " m"),
+                    Text("Y: " + pointetrs89.y.toStringAsFixed(1) + " m"),
+                    Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
+                  ],
+                ),
 
-               */
+                 */
 
-            ],
-          ),
-        ));
+              ],
+            ),
+          )),
+    );
   }
 }
 
