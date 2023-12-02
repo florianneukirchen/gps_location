@@ -86,6 +86,18 @@ class DetailScreen extends StatelessWidget {
           Share.share(jsonEncode(json), subject: waypoint.name);
         }
         break;
+      case 2:
+        {
+          final utmzone = getUTMzone(waypoint.toPosition());
+          final (pointutm, epsg) = reprojectUTM(waypoint.toPosition(), utmzone);
+          Share.share(
+              utmzone.toString()
+                  + " N "
+                  + pointutm.x.toStringAsFixed(0)
+                  + " " + pointutm.y.toStringAsFixed(0)
+                  + " ("+ epsg + ")",
+              subject: waypoint.name);
+        }
       default:
         throw UnimplementedError("Not implemented");
     }
@@ -102,6 +114,7 @@ class DetailScreen extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem<int>(value: 0, child: Text('Share as Lat Lon')),
               PopupMenuItem<int>(value: 1, child: Text('Share as JSON')),
+              PopupMenuItem<int>(value: 2, child: Text('Share as UTM')),
             ],
           ),
         ],
