@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: const Text('Share Current Position (Lat Lon)'),
+              title: const Text('Share Position (Lat Lon)'),
               onTap: () {
                 Navigator.pop(context);
                 final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Share Current Position (JSON)'),
+              title: const Text('Share Position (JSON)'),
               onTap: () {
                 Navigator.pop(context);
                 final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
@@ -182,6 +182,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   var waypoint = Waypoint.fromPosition(currentposition);
                   var json = waypoint.toJson();
                   Share.share(jsonEncode(json), subject: 'My Position');
+                } else {
+                  var scaffoldmessenger = ScaffoldMessenger.of(context);
+                  scaffoldmessenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Position is not known'),
+                      )
+                  );
+                }
+              },
+            ),
+            ListTile(
+              title: const Text('Share Position (UTM)'),
+              onTap: () {
+                Navigator.pop(context);
+                final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
+                if (currentposition != null) {
+                  final utmzone = getUTMzone(currentposition);
+                  final (pointutm, epsg) = reprojectUTM(currentposition, utmzone);
+                  Share.share(
+                      utmzone.toString()
+                          + " N "
+                          + pointutm.x.toStringAsFixed(0)
+                          + " " + pointutm.y.toStringAsFixed(0)
+                          + " ("+ epsg + ")",
+                      subject: 'My Position');
                 } else {
                   var scaffoldmessenger = ScaffoldMessenger.of(context);
                   scaffoldmessenger.showSnackBar(
