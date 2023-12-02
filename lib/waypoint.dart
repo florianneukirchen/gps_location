@@ -85,11 +85,16 @@ class Waypoint {
   }
 
   Marker toMarker(Color? color) {
+    var size = 18.0;
+    if (color != null) {
+      size = 24;
+    }
     return Marker(
       point: LatLng(latitude, longitude),
-      width: 18,
-      height: 18,
-      child: Icon(Icons.location_on, size: 18, color: color),
+
+      //width: 18,
+      //height: 18,
+      child: Icon(Icons.location_on, size: size, color: color),
     );
   }
 
