@@ -210,6 +210,12 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteAllWaypoints() {
+    waypoints.clear();
+    saveWaypoints();
+    notifyListeners();
+  }
+
   LatLng? poslatlng() {
     if (currentposition == null) {
       return null;

@@ -18,6 +18,36 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
 
+  // Confirm Dialog to delete waypoints
+  void _confirmDeleteWaypoints() {
+    // var appState = context.watch<MyAppState>();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Waypoints"),
+          content: Text("Are you sure you want to delete all waypoints?"),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text("Delete All"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Provider.of<MyAppState>(context, listen: false).deleteAllWaypoints();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+
   // For the switching in the dialog
   //SortOrder _selectedSortOrder = SortOrder.nameAscending;
 
@@ -89,10 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var appState = context.watch<MyAppState>();
 
-
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu),
         title: Text(widget.title),
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -105,6 +133,37 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _showSortOrderDialog,
           )
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Bla
+              },
+            ),
+            ListTile(
+              title: const Text('Delete all waypoints'),
+              onTap: () {
+                Navigator.pop(context);
+                _confirmDeleteWaypoints();
+              }),
+
+          ],
+        ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
