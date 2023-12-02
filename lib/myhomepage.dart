@@ -82,20 +82,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildRadioListTile(String title, SortOrder value) {
     var appState = context.watch<MyAppState>();
-    return ListTile(
+    return RadioListTile<SortOrder>(
       title: Text(title),
-      leading: Radio<SortOrder>(
-        value: value,
-        groupValue: appState.sortOrder,
-        onChanged: (SortOrder? selectedValue) {
-          if (selectedValue != null) {
-            appState.sortOrder = selectedValue;
-            Navigator.of(context).pop();
-            // Apply sort order logic here
-            appState.sortWaypoints();
-          };
-        },
-      ),
+      value: value,
+      groupValue: appState.sortOrder,
+      onChanged: (SortOrder? selectedValue) {
+        if (selectedValue != null) {
+          appState.sortOrder = selectedValue;
+          Navigator.of(context).pop();
+          // Apply sort order logic here
+          appState.sortWaypoints();
+        };
+      },
     );
   }
 
