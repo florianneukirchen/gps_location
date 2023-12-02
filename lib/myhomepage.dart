@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'locationwidgets.dart';
 import 'mypositionpage.dart';
 import 'waypointspage.dart';
+import 'waypoint.dart';
 import 'myapp.dart';
 import 'mapwidget.dart';
 
@@ -155,12 +157,31 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: const Text('Share Current Position'),
+              title: const Text('Share Current Position (Lat Lon)'),
               onTap: () {
                 Navigator.pop(context);
                 final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
                 if (currentposition != null) {
                   Share.share(asEW_NW(currentposition.latitude, currentposition.longitude), subject: 'My Position');
+                } else {
+                  var scaffoldmessenger = ScaffoldMessenger.of(context);
+                  scaffoldmessenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Position is not known'),
+                      )
+                  );
+                }
+              },
+            ),
+            ListTile(
+              title: const Text('Share Current Position (JSON)'),
+              onTap: () {
+                Navigator.pop(context);
+                final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
+                if (currentposition != null) {
+                  var waypoint = Waypoint.fromPosition(currentposition);
+                  var json = waypoint.toJson();
+                  Share.share(jsonEncode(json), subject: 'My Position');
                 } else {
                   var scaffoldmessenger = ScaffoldMessenger.of(context);
                   scaffoldmessenger.showSnackBar(
@@ -180,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const Divider(),
             ListTile(
-              title: const Text('Delete all waypoints'),
+              title: const Text('Delete all Waypoints'),
               onTap: () {
                 Navigator.pop(context);
                 _confirmDeleteWaypoints();
