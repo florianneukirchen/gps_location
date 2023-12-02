@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'locationwidgets.dart';
 import 'mypositionpage.dart';
 import 'waypointspage.dart';
 import 'myapp.dart';
@@ -154,12 +155,30 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
+              title: const Text('Share Current Position'),
+              onTap: () {
+                Navigator.pop(context);
+                final currentposition = Provider.of<MyAppState>(context, listen: false).currentposition;
+                if (currentposition != null) {
+                  Share.share(asEW_NW(currentposition.latitude, currentposition.longitude), subject: 'My Position');
+                } else {
+                  var scaffoldmessenger = ScaffoldMessenger.of(context);
+                  scaffoldmessenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Position is not known'),
+                      )
+                  );
+                }
+              },
+            ),
+            ListTile(
               title: const Text('Share Waypoints'),
               onTap: () {
                 Navigator.pop(context);
                 _sharewaypoints();
               },
             ),
+            const Divider(),
             ListTile(
               title: const Text('Delete all waypoints'),
               onTap: () {
