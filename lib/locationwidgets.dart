@@ -265,7 +265,6 @@ int getUTMzone(Position position) {
   var epsg = 'EPSG:326$utmzone';
   String projstring = "+proj=utm +zone=$utmzone";
   // "+proj=utm +zone=$utmzone +datum=WGS84 +no_defs +type=crs"
-  print(projstring);
 
 
   // Set up proj (proj4dart only has few named projections)
