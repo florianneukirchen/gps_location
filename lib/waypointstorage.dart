@@ -29,6 +29,25 @@ class WaypointStorage {
     final path = await _localPath;
     return '$path/waypoints.geojson';
   }
+
+
+  Future<File> get _settingsFile async {
+    final path = await _localPath;
+    return File('$path/settings');
+  }
+
+  Future<String> readSettingsFile() async {
+    final file = await _settingsFile;
+    final contents = await file.readAsString();
+    return contents;
+  }
+
+  Future<File> writeSettingsFile(contents) async {
+    final file = await _settingsFile;
+    print("write");
+    return file.writeAsString(contents);
+  }
+
 }
 
 // https://stackoverflow.com/questions/51807228/writing-to-a-local-json-file-dart-flutter

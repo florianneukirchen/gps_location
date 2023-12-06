@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   // Constructor to init appstate with waypoints and position
   MyAppState(){
+    restoreSettings();
     restoreWaypoints();
     try {
       updateLocation();
@@ -69,7 +70,6 @@ class MyAppState extends ChangeNotifier {
 
     try {
       content = await storage.readWaypointFile();
-      print(content);
     } catch (e) {
       // Do nothing, probably the file does not exist yet
       return;
@@ -81,14 +81,34 @@ class MyAppState extends ChangeNotifier {
       final waypoint = Waypoint.fromJson(wp);
       waypoints.add(waypoint);
     }
-
     notifyListeners();
-
   }
 
   void saveWaypoints() {
     var json = waypoints.map((waypoint) => waypoint.toJson()).toList();
     storage.writeWaypointFile(jsonEncode(json));
+  }
+
+  // Restore / Save Settings
+  void restoreSettings() async {
+    var content = "";
+
+    try {
+      content = await storage.readSettingsFile();
+    } catch (e) {
+      // Do nothing, probably the file does not exist yet
+      return;
+    }
+
+    var jsonResponse = jsonDecode(content);
+    sortOrder = SortOrder.values.byName(jsonResponse['sort order']);
+    // May use more settings at a later stage
+  }
+
+  void saveSettings() {
+    final json = <String, dynamic>{};
+    json['sort order'] = sortOrder.name;
+    storage.writeSettingsFile(jsonEncode(json));
   }
 
   Future<void> updateLocation() async {
@@ -106,7 +126,6 @@ class MyAppState extends ChangeNotifier {
 
   // Subscribe to location stream
   void listenToLocationChanges() {
-    print("listen");
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10, // in meters, location gets updated if change > filter

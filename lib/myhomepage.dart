@@ -103,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.of(context).pop();
           // Apply sort order logic here
           appState.sortWaypoints();
+          appState.saveSettings();
         };
       },
     );
