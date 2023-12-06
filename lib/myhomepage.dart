@@ -9,7 +9,7 @@ import 'waypoint.dart';
 import 'myapp.dart';
 import 'mapwidget.dart';
 
-
+// Contains the Scaffold, appbar and navigation
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // Return tiles for sort order dialog
   Widget _buildRadioListTile(String title, SortOrder value) {
     var appState = context.watch<MyAppState>();
     return RadioListTile<SortOrder>(
@@ -110,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    // Navigation
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -150,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Theme.of(context).colorScheme.primary
               ),
               child: Text(
-                'Drawer Header',
+                'Drawer Header', // TODO change string
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
@@ -266,6 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// Map page
 class MyMapPage extends StatelessWidget {
   const MyMapPage({super.key});
 

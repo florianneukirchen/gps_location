@@ -4,6 +4,7 @@ import 'myapp.dart';
 import 'locationwidgets.dart';
 import 'mapwidget.dart';
 
+// The page showing the current position
 class MyPositionPage extends StatefulWidget {
   const MyPositionPage({super.key});
 
@@ -23,6 +24,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
     super.dispose();
   }
 
+  // Async functions for the buttons
   void _asyncBtnLoc(scaffoldmessenger) async {
     try {
       await Provider.of<MyAppState>(context, listen: false).updateLocation();
@@ -53,6 +55,7 @@ class _MyPositionPageState extends State<MyPositionPage> {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var scaffoldmessenger = ScaffoldMessenger.of(context);
+    // Fall back page if position is not known
     if (appState.currentposition == null) {
       return Center(
         child: Column(
@@ -72,11 +75,10 @@ class _MyPositionPageState extends State<MyPositionPage> {
         ),
       );
     } else {
+      // Main position page
       return Column(
         children: <Widget>[
-          // ShowStatus(statusOK: (appState.positionStream != null)),
           ShowLocation(position: appState.currentposition!),
-          // SizedBox(height:10),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(

@@ -4,11 +4,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/material.dart';
 import 'waypointspage.dart';
 
+// Waypoint class
 class Waypoint {
   final double latitude;
   final double longitude;
   final DateTime timestamp;
 
+  // Attributes
   String name = "Unnamed Waypoint";
 
   double accuracy = 0;
@@ -19,8 +21,10 @@ class Waypoint {
   double heading = 0;
   double headingAccuracy = 0;
 
+  // Main constructor
   Waypoint(this.latitude, this.longitude, this.timestamp);
 
+  // Alternative constructors
   Waypoint.fromPosition(Position position)
       : latitude = position.latitude,
         longitude = position.longitude,
@@ -45,6 +49,7 @@ class Waypoint {
         heading = json['properties']['heading'],
         headingAccuracy = json['properties']['headingAccuracy'];
 
+  // Convert to JSON
   Map<String, dynamic> toJson() => {
     // GeoJSON
     'type': 'Feature',
@@ -65,6 +70,7 @@ class Waypoint {
     }
   };
 
+  // Convert to Position (to be able to reuse widgets)
   Position toPosition() {
     return Position(
       latitude: latitude,
@@ -80,10 +86,12 @@ class Waypoint {
     );
   }
 
+  // Get as LatLng
   LatLng toLatLng() {
     return LatLng(latitude, longitude);
   }
 
+  // Return marker that can be placed on flutter_map
   Marker toMarker(Color? color) {
     var size = 18.0;
     if (color != null) {
@@ -98,6 +106,7 @@ class Waypoint {
     );
   }
 
+  // Return marker that can be placed on flutter_map
   Marker toLinkMarker(int index) {
     return Marker(
       point: LatLng(latitude, longitude),
@@ -118,7 +127,6 @@ class Waypoint {
     );
   }
 
-  // String get latlon => "Lat, Lon: " + latitude.toString() + ", " + longitude.toString();
 }
 
 

@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Manage State with provider
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
@@ -46,6 +47,7 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
+  // Declare Variables
   Position? currentposition;
   StreamSubscription<Position>? positionStream;
   var waypoints = <Waypoint>[];
@@ -61,6 +63,7 @@ class MyAppState extends ChangeNotifier {
     super.dispose();
   }
 
+  // Restore / Save Waypoints
   void restoreWaypoints() async {
     var content = "";
 
@@ -90,24 +93,26 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> updateLocation() async {
     var position = await getCurrentLocation().catchError((e) {
+      // Throw exception again, to be catched in calling functions
       throw Exception(e.message);
     });
     currentposition = position;
+    // Subscribe to Location Stream if not yet listening
     if (positionStream == null) {
       listenToLocationChanges();
     }
     notifyListeners();
   }
 
+  // Subscribe to location stream
   void listenToLocationChanges() {
     print("listen");
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
+      distanceFilter: 10, // in meters, location gets updated if change > filter
     );
     positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
           (Position? position) {
-        print(position==null? 'Unknown' : 'Position stream: $position');
         currentposition = position;
         notifyListeners();
       },
@@ -115,7 +120,6 @@ class MyAppState extends ChangeNotifier {
   }
 
   void sortWaypoints() {
-    print(sortOrder);
     switch (sortOrder) {
       case SortOrder.timeDescending:
         // Sort by timestamp, old to recent
@@ -156,6 +160,7 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
+  // Compare function for sorting
   int sortCompareByDistance(Waypoint a, Waypoint b) {
     Distance distance = Distance();
     final dist_a = distance(poslatlng()!, a.toLatLng());
@@ -177,6 +182,7 @@ class MyAppState extends ChangeNotifier {
     try {
       currentposition = await getCurrentLocation();
     } on Exception catch (e) {
+      // Cut off "Exception..." from string
       errormsg = e.toString().substring(11);
     }
 
@@ -199,6 +205,7 @@ class MyAppState extends ChangeNotifier {
     // Throw exception if updating location failed
     if (errormsg != null) {
       errormsg = "Saved waypoint with last known position, but could not update position:\n" + errormsg;
+      // And set currentposition to null, redirects to "Position Unknown" page
       currentposition = null;
       throw Exception(errormsg);
     }
@@ -216,6 +223,7 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Get current position as LatLng
   LatLng? poslatlng() {
     if (currentposition == null) {
       return null;
@@ -224,7 +232,7 @@ class MyAppState extends ChangeNotifier {
   }
 } // MyAppState
 
-// Get current location
+// Get current location from Geolocator
 Future<Position> getCurrentLocation() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -261,7 +269,7 @@ Future<Position> getCurrentLocation() async {
   return position;
 } // _getCurrentLocation
 
-
+// Convert UTC timestamp to local time
 String asLocalTime(DateTime datetime) {
   return datetime.toLocal().toString().substring(0,16);
 }

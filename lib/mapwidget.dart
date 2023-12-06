@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'myapp.dart';
 
+// Map Widget
 class MyMap extends StatelessWidget {
   const MyMap({
     super.key,
@@ -11,21 +12,23 @@ class MyMap extends StatelessWidget {
     this.linkmarkers = false,
   });
 
-  final int? activeindex;
-  final bool linkmarkers;
+  final int? activeindex; // index of active Waypoint
+  final bool linkmarkers; // Optional redirect to the waypoint details page
 
   @override
   Widget build(BuildContext context) {
 
     var appState = context.watch<MyAppState>();
-    LatLng initialCenter = LatLng(0,0);
+    LatLng initialCenter = LatLng(0,0); // Fall back 0, 0
 
     if (activeindex != null) {
+      // center on waypoint
       initialCenter = appState.waypoints[activeindex!].toLatLng();
     } else if (appState.currentposition != null) {
+      // center on current position
       initialCenter = appState.poslatlng()!;
     } else if (appState.waypoints.isNotEmpty) {
-      // Use the last waypoint of the list. If not keep LatLng 0,0
+      // Fall back to last waypoint of the list. If not keep LatLng 0,0
       initialCenter = appState.waypoints.last.toLatLng();
 
     }
@@ -45,6 +48,7 @@ class MyMap extends StatelessWidget {
             source: Text('OpenStreetMap'),
             backgroundColor: Colors.transparent,
           ),
+          // Marker for current position
           if (appState.currentposition != null) MarkerLayer(
             markers: [
               Marker(
@@ -60,6 +64,7 @@ class MyMap extends StatelessWidget {
             ],
             alignment: Alignment.center,
           ),
+          // Create Marker Layer with all Waypoints
           wpMarkerLayer(activeindex: activeindex, linkmarkers: linkmarkers),
         ],
       ),
@@ -69,11 +74,11 @@ class MyMap extends StatelessWidget {
 
 
 
-
+// Create Marker Layer with all Waypoints
 class wpMarkerLayer extends StatelessWidget {
   const wpMarkerLayer({super.key, this.activeindex, required this.linkmarkers});
 
-  final int? activeindex;
+  final int? activeindex; // index of active waypoint
   final bool linkmarkers;
 
   @override
@@ -108,7 +113,6 @@ class wpMarkerLayer extends StatelessWidget {
 
     return MarkerLayer(
       markers: markers,
-      // Keine Ahnung warum, aber das Ergebnis ist bottomCenter
       alignment: Alignment.center,
     );
   }

@@ -29,6 +29,7 @@ class ShowLocation extends StatelessWidget {
   }
 }
 
+// turn positive/negative Lat Lon to E/W, N/S
 String asEW_NW(double lat, double lon){
   String slat;
   String slon;
@@ -45,6 +46,7 @@ String asEW_NW(double lat, double lon){
   return slat + slon;
 }
 
+// Show Position as LatLong
 class ShowLocationWGS84 extends StatelessWidget {
   const ShowLocationWGS84({
     super.key,
@@ -94,7 +96,7 @@ class ShowLocationWGS84 extends StatelessWidget {
   }
 }
 
-
+// Timestamp
 class ShowTimestamp extends StatelessWidget {
   const ShowTimestamp({
     super.key,
@@ -126,6 +128,7 @@ class ShowTimestamp extends StatelessWidget {
   }
 }
 
+// Show distance of WP to current position
 class ShowDistance extends StatelessWidget {
   const ShowDistance({
     super.key,
@@ -165,7 +168,7 @@ class ShowDistance extends StatelessWidget {
   }
 }
 
-
+// (Disabled, can be removed)
 class ShowStatus extends StatelessWidget {
   const ShowStatus({
     super.key,
@@ -184,6 +187,7 @@ class ShowStatus extends StatelessWidget {
   }
 }
 
+// Show as UTM
 class ShowLocationUTM extends StatelessWidget {
   const ShowLocationUTM({
     super.key,
@@ -229,6 +233,7 @@ class ShowLocationUTM extends StatelessWidget {
   }
 }
 
+// Calculate UTM zone
 int getUTMzone(Position position) {
   int utmzone = ((position.longitude + 180) / 6).floor() + 1;
 
@@ -252,6 +257,7 @@ int getUTMzone(Position position) {
   return utmzone;
 }
 
+// Reproject from Lat Lon to UTM
 (Point, String) reprojectUTM(Position position, int utmzone) {
   var pointSrc = Point(x: position.longitude, y: position.latitude);
 

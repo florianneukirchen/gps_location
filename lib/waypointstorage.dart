@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+// Handle reading and writing of Waypoints to disk
 class WaypointStorage {
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();

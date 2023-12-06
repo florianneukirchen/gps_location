@@ -8,6 +8,7 @@ import 'waypoint.dart';
 import 'locationwidgets.dart';
 import 'mapwidget.dart';
 
+// Page showing all waypoints
 class WaypointsPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class WaypointsPage extends StatelessWidget{
             ),
             isThreeLine: true,
             onTap: () {
+              // Show detail screen
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -55,6 +57,7 @@ class WaypointsPage extends StatelessWidget{
   }
 }
 
+// Create a nice string for the distance
 String distanceMessage(LatLng? a, LatLng b) {
   if (a == null) {
     return "";
@@ -62,17 +65,16 @@ String distanceMessage(LatLng? a, LatLng b) {
     Distance distance = new Distance();
     return " (➞ ${(distance(a, b) / 1000).toStringAsFixed(2)} km)";
   }
-
-
 }
 
-
+// Waypoint detail screen
 class DetailScreen extends StatelessWidget {
   const DetailScreen({super.key, required this.waypoint, required this.wpindex });
 
   final Waypoint waypoint;
   final int wpindex;
 
+  // handle click on the ... menu in the appbar
   _handleClick(int item) {
     switch (item) {
       case 0:
@@ -109,6 +111,7 @@ class DetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Waypoint Details'),
         actions: <Widget>[
+          // menu button "..."
           PopupMenuButton<int>(
             onSelected: (item) => _handleClick(item),
             itemBuilder: (context) => [
@@ -132,7 +135,7 @@ class DetailScreen extends StatelessWidget {
 
 }
 
-
+// used for waypoint name
 class BigCard extends StatelessWidget {
   const BigCard({
     super.key,
