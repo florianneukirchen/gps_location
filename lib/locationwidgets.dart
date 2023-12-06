@@ -196,7 +196,6 @@ class ShowLocationUTM extends StatelessWidget {
   Widget build(BuildContext context) {
     final utmzone = getUTMzone(position);
     final (pointutm, epsg) = reprojectUTM(position, utmzone);
-    // final (pointetrs89, epsg89) = reprojectUTM(position, utmzone, etrs89: true);
     return GestureDetector(
       onLongPress: () async{
         await Clipboard.setData(
@@ -223,20 +222,6 @@ class ShowLocationUTM extends StatelessWidget {
                     Text("(± " + position.accuracy.toStringAsFixed(0) + " m)"),
                   ],
                 ),
-                /*
-                SizedBox(height: 8),
-                Text("UTM Zone $utmzone N (ETRS89, $epsg89)"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("X: " + pointetrs89.x.toStringAsFixed(1) + " m"),
-                    Text("Y: " + pointetrs89.y.toStringAsFixed(1) + " m"),
-                    Text("(± " + position.accuracy.toStringAsFixed(1) + " m)"),
-                  ],
-                ),
-
-                 */
-
               ],
             ),
           )),
@@ -267,7 +252,7 @@ int getUTMzone(Position position) {
   return utmzone;
 }
 
-(Point, String) reprojectUTM(Position position, int utmzone, {bool etrs89 = false}) {
+(Point, String) reprojectUTM(Position position, int utmzone) {
   var pointSrc = Point(x: position.longitude, y: position.latitude);
 
   // WGS84
@@ -276,10 +261,6 @@ int getUTMzone(Position position) {
   // "+proj=utm +zone=$utmzone +datum=WGS84 +no_defs +type=crs"
   print(projstring);
 
-  if (etrs89) {
-    epsg = 'EPSG:258$utmzone';
-    projstring = "+proj=utm +zone=$utmzone +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs";
-  }
 
   // Set up proj (proj4dart only has few named projections)
   // Get it by name if it exists, else create and add it
