@@ -72,35 +72,33 @@ class _MyPositionPageState extends State<MyPositionPage> {
         ),
       );
     } else {
-      return Center(
-        child: Column(
-          children: <Widget>[
-            // ShowStatus(statusOK: (appState.positionStream != null)),
-            ShowLocation(position: appState.currentposition!),
-            // SizedBox(height:10),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: textController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Optional Waypoint Name",
-                ),
+      return Column(
+        children: <Widget>[
+          // ShowStatus(statusOK: (appState.positionStream != null)),
+          ShowLocation(position: appState.currentposition!),
+          // SizedBox(height:10),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: textController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Optional Waypoint Name",
               ),
             ),
-            // SizedBox(height:5),
-            ElevatedButton(
-              onPressed: () {
-                _asyncBtnWP(scaffoldmessenger, textController.text);
-                textController.clear();
-                // hide keybord
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              child: const Text('Save Waypoint'),
-            ),
-            MyMap(),
-          ],
-        ),
+          ),
+          // SizedBox(height:5),
+          ElevatedButton(
+            onPressed: () {
+              _asyncBtnWP(scaffoldmessenger, textController.text);
+              textController.clear();
+              // hide keybord
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: const Text('Save Waypoint'),
+          ),
+          MyMap(),
+        ],
       );
     }
   }

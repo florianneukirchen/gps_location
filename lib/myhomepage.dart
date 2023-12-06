@@ -127,9 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
-      appBar: MediaQuery.of(context).orientation == Orientation.landscape
-          ? null // Hide App Bar in landscape orientation
-          : AppBar(
+      appBar: AppBar(
             title: Text(widget.title),
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             backgroundColor: Theme.of(context).colorScheme.primary,
