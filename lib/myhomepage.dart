@@ -127,20 +127,22 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.swap_vert,
-              semanticLabel: "sort order",
-            ),
-            onPressed: _showSortOrderDialog,
-          )
-        ],
-      ),
+      appBar: MediaQuery.of(context).orientation == Orientation.landscape
+          ? null // Hide App Bar in landscape orientation
+          : AppBar(
+            title: Text(widget.title),
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.swap_vert,
+                  semanticLabel: "sort order",
+                ),
+                onPressed: _showSortOrderDialog,
+              )
+            ],
+          ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
