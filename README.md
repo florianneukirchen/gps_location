@@ -1,16 +1,14 @@
-# gps_location
+# GPS Location
+Android-App written in flutter / dart to show the current location (lat lon as well as UTM), speed etc. 
+as values and on a map. Allows to save waypoints and browse, and you can easily share your position or waypoints.
 
-Show GPS location
+Uses flutter_map, langlong2, geolocator, proj4dart, among other packages. State is maneged with the 
+provider package.
 
-## Getting Started
+I wrote this App to learn flutter. I am not sharing it on the app store, because I am using the 
+main tile server of OpenStreetMap that should not be overwhelmed with requests. 
 
-This project is a starting point for a Flutter application.
+If you are forking this repro and start to develop for many users, please don't forget to change
+"userAgentPackageName: 'com.example.app'" in mapwidget.dart.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
