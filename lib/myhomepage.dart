@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _sharewaypoints() async {
     final filepath = await Provider.of<MyAppState>(context, listen: false).storage.filepath();
-    Share.shareXFiles([XFile(filepath)], text: 'Great picture');
+    Share.shareXFiles([XFile(filepath)], text: 'My Waypoints');
   }
 
 
