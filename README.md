@@ -2,7 +2,7 @@
 Android-App written in flutter / dart to show the current location (lat lon as well as UTM), speed etc. 
 as values and on a map. Allows to save and browse waypoints, and you can easily share your position or waypoints.
 
-Uses flutter_map, langlong2, geolocator, proj4dart, among other packages. State is maneged with the 
+Uses flutter_map, langlong2, geolocator, proj4dart, among other packages. State is managed with the 
 provider package.
 
 I wrote this App to learn flutter. I am not sharing it on the app store, because I am using the 
