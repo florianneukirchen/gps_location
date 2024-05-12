@@ -77,7 +77,7 @@ class MyAppState extends ChangeNotifier {
 
     var jsonResponse = jsonDecode(content);
 
-    for (var wp in jsonResponse) {
+    for (var wp in jsonResponse['features']) {
       final waypoint = Waypoint.fromJson(wp);
       waypoints.add(waypoint);
     }
@@ -86,7 +86,11 @@ class MyAppState extends ChangeNotifier {
 
   void saveWaypoints() {
     var json = waypoints.map((waypoint) => waypoint.toJson()).toList();
-    storage.writeWaypointFile(jsonEncode(json));
+    final featurecollection = {
+      "type": "FeatureCollection",
+      "features": json,
+    };
+    storage.writeWaypointFile(jsonEncode(featurecollection));
   }
 
   // Restore / Save Settings
